@@ -1,0 +1,28 @@
+spring:
+  ai:
+    azure:
+      openai:
+        api-key: ${AZURE_OPENAI_API_KEY:}
+        endpoint: ${AZURE_OPENAI_ENDPOINT:}
+        chat:
+          options:
+            deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:gpt-4o}
+            temperature: 0.7
+
+server:
+  port: 8080
+
+ckchat:
+  agents:
+    config-path: classpath:agents/*.md
+  data:
+    path: classpath:data/
+  conversation:
+    max-messages-before-summarization: 10
+    messages-to-keep-after-summarization: 5
+    profile-low-completion-threshold: 50
+
+logging:
+  level:
+    com.ckchat: DEBUG
+    org.springframework.ai: INFO

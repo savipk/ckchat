@@ -1,0 +1,280 @@
+{
+  "entityId": "8f8a9c04-51a3-49f4-bb63-93b6fff4d9f5",
+  "userId": "8f8a9c04-51a3-49f4-bb63-93b6fff4d9f5",
+  "externalSourceId": "8f8a9c04-51a3-49f4-bb63-93b6fff4d9f5",
+  "externalSourceType": "HR_DATA_MESH",
+  "email": "john.doe@ubs.com",
+  "core": {
+    "name": {
+      "salutation": "Ms",
+      "legalFirstName": "John",
+      "legalLastName": "Doe",
+      "businessFirstName": "John",
+      "businessLastName": "Doe"
+    },
+    "rank": {
+      "code": "DI",
+      "description": "Director",
+      "id": "25"
+    },
+    "employeeType": {
+      "code": "y",
+      "description": "Employee"
+    },
+    "businessTitle": "FCP Chapter Lead, Detection POD, BRM",
+    "jobCode": "ZL0774",
+    "enterpriseSeniorityDate": "2025-02-10",
+    "gcrs": {
+      "businessDivisionCode": "N140499",
+      "businessDivisionDescription": "Personal & Corporate Banking",
+      "businessUnitCode": "N34136",
+      "businessUnitDescription": "COO UBS Switzerland (BU)",
+      "businessAreaCode": "N11576",
+      "businessAreaDescription": "COO UBS Switzerland (BA)",
+      "businessSectorCode": "N23590",
+      "businessSectorDescription": "Business Risk Management_consolidated",
+      "businessSegmentCode": "N27787",
+      "businessSegmentDescription": "BRM UBS CH Switzerland",
+      "businessFunctionCode": "61310",
+      "businessFunctionDescription": "BRM PRODUCTS 2"
+    },
+    "organizationalUnits": [
+      {
+        "code": "STY5",
+        "description": "BUSINESS DIVISIONS",
+        "level": 3
+      },
+      {
+        "code": "AP66",
+        "description": "PERSONAL & CORPORATE BANKING",
+        "level": 4
+      },
+      {
+        "code": "AU78",
+        "description": "COO P&C AND UBS REGION SWITZERLAND",
+        "level": 5
+      },
+      {
+        "code": "PZLM",
+        "description": "BUSINESS RISK MANAGEMENT",
+        "level": 6
+      }
+    ],
+    "reportingDistance": {
+      "geb": 4,
+      "ceo": 5,
+      "chairman": 6
+    },
+    "workLocation": {
+      "code": "905475",
+      "description": "ZLUe0frich-Europaallee 1",
+      "buildingCode": "42CS",
+      "postalCode": "8004",
+      "city": "ZLUe0frich",
+      "stateCode": "ZH",
+      "state": "ZURICH",
+      "countryCode": "CH",
+      "country": "SWITZERLAND",
+      "region": "Switzerland"
+    },
+    "language": {
+      "languages": [
+        {
+          "id": "88235ca0-d703-4d09-9928-099f658372b5",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "de",
+            "description": "German"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "NATIVE",
+            "description": "Native"
+          }
+        },
+        {
+          "id": "3fafc10e-0c7c-4e77-8d73-1dfc4d422151",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "en",
+            "description": "English"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "FLUENT",
+            "description": "Fluent"
+          }
+        },
+        {
+          "id": "ef2fa76e-d74f-4f2a-9f1b-b428ef9a9f58",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "fr",
+            "description": "French"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "INTERMEDIATE",
+            "description": "Intermediate"
+          }
+        },
+        {
+          "id": "de543d08-d889-4867-bf54-dd51a9cf33a1",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "es",
+            "description": "Spanish"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "INTERMEDIATE",
+            "description": "Intermediate"
+          }
+        },
+        {
+          "id": "919f9657-5bd0-41e2-bd59-f776b05b4f45",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "zh",
+            "description": "Chinese"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "BASIC",
+            "description": "Basic"
+          }
+        }
+      ]
+    },
+    "experience": {
+      "experiences": [
+        {
+          "id": "eeb183b9-52a3-4cfb-b620-59a3f4c5bdd3",
+          "jobTitle": "FCP Chapter Lead, Detection POD, BRM",
+          "company": "UBS",
+          "area": {
+            "code": "980ed955-95e5-46cf-8f5b-84bf2fbddf45",
+            "description": "Personal & Corporate Banking"
+          },
+          "segment": {
+            "code": "82544f58-36af-4799-a298-971b2933dfd6",
+            "description": "P&C COO AND Region Switzerland and Internal"
+          },
+          "startDate": "2019-11-01",
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "CH",
+            "description": "Switzerland"
+          },
+          "description": "Chapter Lead Financial Crime Prevention",
+          "internationalExperience": true,
+          "crossDivisionalExperience": true
+        }
+      ]
+    },
+    "qualification": {
+      "educations": [
+        {
+          "id": "721f8574-e34d-4bf3-9085-2b750878a7da",
+          "institutionName": "HSLU Hochschule Luzern",
+          "degree": "Diploma of Advanced Studies",
+          "areaOfStudy": "Compliance Management",
+          "completionYear": 0,
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "CH",
+            "description": "Switzerland"
+          },
+          "achievements": ""
+        },
+        {
+          "id": "A26df458-07e1-4fd5-801c-94f1e6f77864",
+          "institutionName": "Institut fUoe0r Psychosoziale Bildung",
+          "degree": "Dipl. Psychosoziale Beraterin",
+          "areaOfStudy": "Psychosoziale Beratung",
+          "completionYear": 0,
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "CH",
+            "description": "Switzerland"
+          },
+          "achievements": ""
+        }
+      ],
+      "certifications": []
+    },
+    "careerAspirationPreference": {
+      "preferredAspirations": [
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "f4c4db78-8a9f-4c8a-ae10-9add83dd40e2",
+          "description": "Non-client facing role"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "08427fa2-606c-44cb-b32d-398b5637a7ea",
+          "description": "Focus on leadership and management"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "dd42533f-7ae7-454b-a599-fa918a03f597",
+          "description": "Keep current (or similar) responsibilities and ownership"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "c838cc86-1f77-4f82-89a4-6cd25aaceff9",
+          "description": "Leading a small team"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "f081b69d-ed09-4aef-a600-31ffeaafb6e",
+          "description": "Leading a large team"
+        }
+      ]
+    },
+    "careerLocationPreference": {
+      "preferredRelocationTimeline": {
+        "type": "SimpleReferenceDataDto",
+        "code": "NOW",
+        "description": "Yes, ready now"
+      },
+      "preferredRelocationRegions": [
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "APAC",
+          "description": "APAC (excl. India)"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "US",
+          "description": "United States of America"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "AMERICAS",
+          "description": "Americas (excl. US)"
+        }
+      ]
+    },
+    "careerRolePreference": {
+      "preferredRoles": [
+        {
+          "id": "e897b5cb-ce09-46e4-a7e0-714d8e806614",
+          "roleClassification": {
+            "type": "GlobalComplianceRoleFrameworkReferenceDataParentDto",
+            "code": "b2c7fe85-eba8-41c6-9578-284ad4bef7a8",
+            "description": "Compliance, Regulatory & Governance",
+            "children": [
+              {
+                "code": "9bdd6b5b3-4de1-4c04-9472-3deed2f962f7",
+                "description": "Team Leader Compliance, Regulatory & Governance",
+                "jobParentCode": "ZS288"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "completionScore": 100
+  }
+}
