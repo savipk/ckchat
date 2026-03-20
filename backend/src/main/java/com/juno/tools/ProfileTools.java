@@ -94,9 +94,9 @@ public class ProfileTools {
         );
     }
 
-    @Tool(description = "Open the profile editor side panel. No data returned — the panel slides in from the right.")
+    @Tool(description = "Open a read-only profile panel showing the full profile. Use this when the user wants to view their profile. This panel is read-only — edits are done through section-specific tools like infer_skills (for skills) or update_profile (for experience).")
     public Map<String, Object> openProfilePanel() {
-        return Map.of("action", "openPanel", "panel", "profileEditor");
+        return Map.of("action", "openPanel", "panel", "profileViewer");
     }
 
     @Tool(description = "Restore the profile from the most recent backup. "

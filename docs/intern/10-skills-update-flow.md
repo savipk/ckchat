@@ -8,7 +8,7 @@ This document traces the **complete control and data flow** when a user updates 
 
 | Step | User Message | Expected Outcome |
 |------|-------------|-----------------|
-| 1 | "let me edit my skills" | Profile editor panel slides open |
+| 1 | "let me edit my skills" | SkillsCard appears with inferred skills from the user's profile |
 | 2 | "add python to my skills" | Python is added to the user's skill list, profile score recalculated |
 
 ---
@@ -46,7 +46,7 @@ This document traces the **complete control and data flow** when a user updates 
 │       │                                                                          │
 │       │  ┌───────────────────────────────────────────────────────┐               │
 │       ├──│ Tools (ProfileTools)                                  │               │
-│       │  │ ├── openProfilePanel()     Frontend tool (UI action)  │               │
+│       │  │ ├── openProfilePanel()     Frontend tool (read-only)  │               │
 │       │  │ ├── updateProfile()        Backend tool (data write)  │               │
 │       │  │ ├── profileAnalyzer()      Backend tool (data read)   │               │
 │       │  │ ├── inferSkills()          Backend tool (LLM-assisted)│               │
@@ -78,128 +78,149 @@ This document traces the **complete control and data flow** when a user updates 
 ## Sequence Diagram — Step 1: "let me edit my skills"
 
 ```
-┌────────┐  ┌───────────┐  ┌────────────┐  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
-│Browser │  │  Agent    │  │Orchestrator│  │ Advisor │  │ Worker   │  │  Tools   │  │  Azure  │
-│(Copilot│  │Controller │  │            │  │  Chain  │  │  Agent   │  │(Profile  │  │ OpenAI  │
-│  Kit)  │  │           │  │            │  │         │  │(Profile) │  │  Tools)  │  │   LLM   │
-└───┬────┘  └─────┬─────┘  └──────┬─────┘  └────┬────┘  └────┬─────┘  └────┬─────┘  └────┬────┘
-    │             │               │              │            │             │              │
-    │ POST /api/  │               │              │            │             │              │
-    │ agent/run   │               │              │            │             │              │
-    │ ──────────> │               │              │            │             │              │
-    │             │               │              │            │             │              │
-    │             │ process()     │              │            │             │              │
-    │             │ ────────────> │              │            │             │              │
-    │             │               │              │            │             │              │
-    │             │               │ classifyIntent("let me edit my skills")               │
-    │             │               │ keywords: "edit" + "skills"                            │
-    │             │               │ ──────> route = "profile"                              │
-    │             │               │              │            │             │              │
-    │             │               │ agentClients  │            │             │              │
-    │             │               │ .get("profile")            │             │              │
-    │             │               │ ─────────────────────────> │             │              │
-    │             │               │              │            │             │              │
-    │             │               │              │ agent      │             │              │
-    │             │               │              │ .prompt()  │             │              │
-    │             │               │              │ .user(msg) │             │              │
-    │             │               │              │ .call()    │             │              │
-    │             │               │              │ <───────── │             │              │
-    │             │               │              │            │             │              │
-    │             │               │         ┌────┴────────────────┐        │              │
-    │             │               │         │ SummarizationAdvisor│        │              │
-    │             │               │         │ (order 100)         │        │              │
-    │             │               │         │ 2 msgs < 10 max     │        │              │
-    │             │               │         │ → pass through      │        │              │
-    │             │               │         └────┬────────────────┘        │              │
-    │             │               │              │            │             │              │
-    │             │               │         ┌────┴────────────────┐        │              │
-    │             │               │         │PersonalizationAdvisor        │              │
-    │             │               │         │ (order 200)         │        │              │
-    │             │               │         │ persona="employee"  │        │              │
-    │             │               │         │ → inject user context│       │              │
-    │             │               │         └────┬────────────────┘        │              │
-    │             │               │              │            │             │              │
-    │             │               │         ┌────┴────────────────┐        │              │
-    │             │               │         │ SimpleLoggerAdvisor │        │              │
-    │             │               │         │ (order 900)         │        │              │
-    │             │               │         │ → log request       │        │              │
-    │             │               │         └────┬────────────────┘        │              │
-    │             │               │              │            │             │              │
-    │             │               │              │   System prompt (profile.md)            │
-    │             │               │              │   + user message                        │
-    │             │               │              │   + tool definitions (5 tools)          │
-    │             │               │              │   ─────────────────────────────────────>│
-    │             │               │              │            │             │              │
-    │             │               │              │            │             │    LLM reads │
-    │             │               │              │            │             │    Tool Rule │
-    │             │               │              │            │             │    #4: "edit │
-    │             │               │              │            │             │    profile → │
-    │             │               │              │            │             │    MUST call │
-    │             │               │              │            │             │    openProfile
-    │             │               │              │            │             │    Panel"    │
-    │             │               │              │            │             │              │
-    │             │               │              │            │             │   Tool call: │
-    │             │               │              │            │             │   openProfile│
-    │             │               │              │            │             │   Panel()    │
-    │             │               │              │            │  <──────────────────────── │
-    │             │               │              │            │             │              │
-    │             │               │              │   Spring AI auto-       │              │
-    │             │               │              │   executes tool         │              │
-    │             │               │              │   callback              │              │
-    │             │               │              │            │ ─────────> │              │
-    │             │               │              │            │             │              │
-    │             │               │              │            │  return     │              │
-    │             │               │              │            │  {action:   │              │
-    │             │               │              │            │   "openPanel",             │
-    │             │               │              │            │   panel:    │              │
-    │             │               │              │            │   "profile  │              │
-    │             │               │              │            │   Editor"}  │              │
-    │             │               │              │            │ <───────── │              │
-    │             │               │              │            │             │              │
-    │             │               │              │  Tool result returned to LLM           │
-    │             │               │              │   ─────────────────────────────────────>│
-    │             │               │              │            │             │              │
-    │             │               │              │            │             │   Final text:│
-    │             │               │              │            │             │   "I've      │
-    │             │               │              │            │             │    opened the│
-    │             │               │              │            │             │    profile   │
-    │             │               │              │            │             │    editor"   │
-    │             │               │              │  <──────────────────────────────────────│
-    │             │               │              │            │             │              │
-    │             │               │         ┌────┴────────────────┐        │              │
-    │             │               │         │ SimpleLoggerAdvisor │        │              │
-    │             │               │         │ → log response      │        │              │
-    │             │               │         └────┬────────────────┘        │              │
-    │             │               │              │            │             │              │
-    │             │               │ AgentResponse│            │             │              │
-    │             │               │ (text +      │            │             │              │
-    │             │               │  toolResults)│            │             │              │
-    │             │               │ <────────────┘            │             │              │
-    │             │               │              │            │             │              │
-    │             │ AgentResponse │              │            │             │              │
-    │             │ <──────────── │              │            │             │              │
-    │             │               │              │            │             │              │
-    │             │ ProtocolAdapter               │            │             │              │
-    │             │ .toSSE()      │              │            │             │              │
-    │             │               │              │            │             │              │
-    │ SSE events  │               │              │            │             │              │
-    │ <────────── │               │              │            │             │              │
-    │             │               │              │            │             │              │
-    │  RUN_STARTED│               │              │            │             │              │
-    │  TOOL_CALL_START (openProfilePanel)        │            │             │              │
-    │  TOOL_CALL_ARGS  ({action: "openPanel"})   │            │             │              │
-    │  TOOL_CALL_END   │          │              │            │             │              │
-    │  TEXT_MESSAGE_START          │              │            │             │              │
-    │  TEXT_MESSAGE_CONTENT ("I've opened...")    │            │             │              │
-    │  TEXT_MESSAGE_END│          │              │            │             │              │
-    │  RUN_FINISHED   │          │              │            │             │              │
-    │             │               │              │            │             │              │
-    │ CopilotKit  │               │              │            │             │              │
-    │ renders:    │               │              │            │             │              │
-    │ - Panel     │               │              │            │             │              │
-    │   slides in │               │              │            │             │              │
-    │ - Chat text │               │              │            │             │              │
-    │   shown     │               │              │            │             │              │
+┌────────┐  ┌───────────┐  ┌────────────┐  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
+│Browser │  │  Agent    │  │Orchestrator│  │ Advisor │  │ Worker   │  │  Tools   │  │ Services │  │  Azure  │
+│(Copilot│  │Controller │  │            │  │  Chain  │  │  Agent   │  │(Profile  │  │(Profile  │  │ OpenAI  │
+│  Kit)  │  │           │  │            │  │         │  │(Profile) │  │  Tools)  │  │ Manager) │  │   LLM   │
+└───┬────┘  └─────┬─────┘  └──────┬─────┘  └────┬────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬────┘
+    │             │               │              │            │             │              │              │
+    │ POST /api/  │               │              │            │             │              │              │
+    │ agent/run   │               │              │            │             │              │              │
+    │ ──────────> │               │              │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │ process()     │              │            │             │              │              │
+    │             │ ────────────> │              │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │ classifyIntent("let me edit my skills")               │              │
+    │             │               │ keywords: "edit" + "skills"                            │              │
+    │             │               │ ──────> route = "profile"                              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │ agentClients  │            │             │              │              │
+    │             │               │ .get("profile")            │             │              │              │
+    │             │               │ ─────────────────────────> │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │              │ agent      │             │              │              │
+    │             │               │              │ .prompt()  │             │              │              │
+    │             │               │              │ .user(msg) │             │              │              │
+    │             │               │              │ .call()    │             │              │              │
+    │             │               │              │ <───────── │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │         ┌────┴────────────────┐        │              │              │
+    │             │               │         │ SummarizationAdvisor│        │              │              │
+    │             │               │         │ (order 100)         │        │              │              │
+    │             │               │         │ 2 msgs < 10 max     │        │              │              │
+    │             │               │         │ → pass through      │        │              │              │
+    │             │               │         └────┬────────────────┘        │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │         ┌────┴────────────────┐        │              │              │
+    │             │               │         │PersonalizationAdvisor        │              │              │
+    │             │               │         │ (order 200)         │        │              │              │
+    │             │               │         │ persona="employee"  │        │              │              │
+    │             │               │         │ → inject user context│       │              │              │
+    │             │               │         └────┬────────────────┘        │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │         ┌────┴────────────────┐        │              │              │
+    │             │               │         │ SimpleLoggerAdvisor │        │              │              │
+    │             │               │         │ (order 900)         │        │              │              │
+    │             │               │         │ → log request       │        │              │              │
+    │             │               │         └────┬────────────────┘        │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │              │   System prompt (profile.md)            │              │
+    │             │               │              │   + user message                        │              │
+    │             │               │              │   + tool definitions (5 tools)          │              │
+    │             │               │              │   ──────────────────────────────────────────────────> │
+    │             │               │              │            │             │              │              │
+    │             │               │              │            │             │              │    LLM reads │
+    │             │               │              │            │             │              │    Tool Rule │
+    │             │               │              │            │             │              │    #2: "edit │
+    │             │               │              │            │             │              │    my skills"│
+    │             │               │              │            │             │              │    → MUST    │
+    │             │               │              │            │             │              │    call      │
+    │             │               │              │            │             │              │    infer_    │
+    │             │               │              │            │             │              │    skills    │
+    │             │               │              │            │             │              │              │
+    │             │               │              │            │             │              │   Tool call: │
+    │             │               │              │            │             │              │   inferSkills│
+    │             │               │              │            │             │              │   ()         │
+    │             │               │              │            │  <─────────────────────────────────────── │
+    │             │               │              │            │             │              │              │
+    │             │               │              │   Spring AI auto-       │              │              │
+    │             │               │              │   executes tool         │              │              │
+    │             │               │              │   callback              │              │              │
+    │             │               │              │            │ ─────────> │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │              │            │  ┌─────────┴──────────┐   │              │
+    │             │               │              │            │  │ inferSkills()      │   │              │
+    │             │               │              │            │  │                    │   │              │
+    │             │               │              │            │  │  1. load profile   │   │              │
+    │             │               │              │            │  │     ──────────────────> │              │
+    │             │               │              │            │  │     ProfileManager │   │              │
+    │             │               │              │            │  │     .load()        │   │              │
+    │             │               │              │            │  │     <────────────────── │              │
+    │             │               │              │            │  │                    │   │              │
+    │             │               │              │            │  │  2. extract        │   │              │
+    │             │               │              │            │  │     experience     │   │              │
+    │             │               │              │            │  │     entries        │   │              │
+    │             │               │              │            │  │                    │   │              │
+    │             │               │              │            │  │  3. return {       │   │              │
+    │             │               │              │            │  │     skills: [...], │   │              │
+    │             │               │              │            │  │     evidence: [...]}   │              │
+    │             │               │              │            │  └─────────┬──────────┘   │              │
+    │             │               │              │            │ <───────── │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │              │  Tool result returned to LLM           │              │
+    │             │               │              │   ──────────────────────────────────────────────────> │
+    │             │               │              │            │             │              │              │
+    │             │               │              │            │             │              │   Final text:│
+    │             │               │              │            │             │              │   "I've      │
+    │             │               │              │            │             │              │    analyzed  │
+    │             │               │              │            │             │              │    your exp  │
+    │             │               │              │            │             │              │    and found │
+    │             │               │              │            │             │              │    some great│
+    │             │               │              │            │             │              │    skills!"  │
+    │             │               │              │  <─────────────────────────────────────────────────── │
+    │             │               │              │            │             │              │              │
+    │             │               │         ┌────┴────────────────┐        │              │              │
+    │             │               │         │ SimpleLoggerAdvisor │        │              │              │
+    │             │               │         │ → log response      │        │              │              │
+    │             │               │         └────┬────────────────┘        │              │              │
+    │             │               │              │            │             │              │              │
+    │             │               │ AgentResponse│            │             │              │              │
+    │             │               │ (text +      │            │             │              │              │
+    │             │               │  toolResults)│            │             │              │              │
+    │             │               │ <────────────┘            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │ AgentResponse │              │            │             │              │              │
+    │             │ <──────────── │              │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │             │ ┌─────────────────────────┐  │            │             │              │              │
+    │             │ │ AgUiProtocolAdapter      │  │            │             │              │              │
+    │             │ │ .toSSE()                 │  │            │             │              │              │
+    │             │ └─────────────────────────┘  │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │ SSE events  │               │              │            │             │              │              │
+    │ <────────── │               │              │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │  RUN_STARTED│               │              │            │             │              │              │
+    │  TOOL_CALL_START (inferSkills)             │            │             │              │              │
+    │  TOOL_CALL_ARGS  ({})      │              │            │             │              │              │
+    │  TOOL_CALL_END   │          │              │            │             │              │              │
+    │  TOOL_CALL_RESULT│({skills:[...], evidence:[...]})     │             │              │              │
+    │  TEXT_MESSAGE_START          │              │            │             │              │              │
+    │  TEXT_MESSAGE_CONTENT ("I've analyzed...")  │            │             │              │              │
+    │  TEXT_MESSAGE_END│          │              │            │             │              │              │
+    │  RUN_FINISHED   │          │              │            │             │              │              │
+    │             │               │              │            │             │              │              │
+    │ CopilotKit  │               │              │            │             │              │              │
+    │ renders:    │               │              │            │             │              │              │
+    │ - SkillsCard│               │              │            │             │              │              │
+    │   (inferred │               │              │            │             │              │              │
+    │    skills   │               │              │            │             │              │              │
+    │    with     │               │              │            │             │              │              │
+    │    select/  │               │              │            │             │              │              │
+    │    save)    │               │              │            │             │              │              │
+    │ - Chat text │               │              │            │             │              │              │
+    │   shown     │               │              │            │             │              │              │
 ```
 
 ---
@@ -466,7 +487,7 @@ if (EMPLOYEE_AGENTS.contains(def.name())) {
 #### 1.5 Worker Agent (Profile) sends to Azure OpenAI LLM
 
 The Profile Worker Agent is a Spring AI `ChatClient` configured with:
-- **System prompt** from `resources/agents/profile.md` (87 lines of behavior rules)
+- **System prompt** from `resources/agents/profile.md` (behavior rules + tool trigger rules)
 - **Tool definitions** for all 5 ProfileTools methods (sent as JSON schema to the LLM)
 
 Spring AI packages the system prompt + user message + tool definitions and sends them to Azure OpenAI (GPT-4o).
@@ -475,28 +496,35 @@ Spring AI packages the system prompt + user message + tool definitions and sends
 
 #### 1.6 Azure OpenAI LLM decides which tool to call
 
-The LLM evaluates the message against the **Tool Trigger Rules** embedded in the system prompt. Rule 4 matches:
+The LLM evaluates the message against the **Tool Trigger Rules** embedded in the system prompt. Rule #2 matches:
 
-> User asks to view, edit, review, or improve their profile → MUST call **openProfilePanel** first
+> User asks about skills, "show me skills", "what skills do I have", "improve my skills", "analyze my skills", "update my skills", **"edit my skills"**, "edit skills", "let me edit my skills" → MUST call **infer_skills** immediately.
 
-The LLM returns a tool call decision: `openProfilePanel()`.
+This rule has higher priority than Rule #4 (`openProfilePanel`), which only applies to viewing the full profile in read-only mode. Skills editing is always handled through `inferSkills`.
 
-**File:** `resources/agents/profile.md` (line 36)
+The LLM returns a tool call decision: `inferSkills()`.
 
-#### 1.7 Tools: Spring AI executes openProfilePanel()
+**File:** `resources/agents/profile.md` (line 34)
 
-Spring AI intercepts the LLM's tool call and invokes `ProfileTools.openProfilePanel()`:
+#### 1.7 Tools: Spring AI executes inferSkills()
 
-```java
-@Tool(description = "Open the profile editor side panel.")
-public Map<String, Object> openProfilePanel() {
-    return Map.of("action", "openPanel", "panel", "profileEditor");
+Spring AI intercepts the LLM's tool call and invokes `ProfileTools.inferSkills()`. This tool:
+
+1. Loads the user's profile via `ProfileManager.load()`
+2. Extracts experience entries to analyze what skills the user likely has
+3. Returns the inferred skills with evidence (which experience entry each skill was derived from)
+
+```json
+{
+  "skills": ["Java", "Spring Boot", "REST APIs", "Agile"],
+  "evidence": [
+    { "skill": "Java", "source": "Senior Developer at Acme Corp", "detail": "5 years" },
+    { "skill": "Spring Boot", "source": "Backend Lead at TechCo", "detail": "3 years" }
+  ]
 }
 ```
 
-This is a **frontend tool** — the backend returns a UI directive, not data. No services are called.
-
-The tool result is sent back to the LLM, which generates a final text response incorporating it (e.g., "I've opened your profile editor — what would you like to update?").
+The tool result is sent back to the LLM, which generates a short intro message (per the Tool Response Guidelines: "NEVER name, list, or enumerate the skills — they are shown in an interactive SkillsCard").
 
 **File:** `tools/ProfileTools.java`
 
@@ -507,25 +535,28 @@ The `AgentResponse` (text + tool call results) flows back through the Orchestrat
 | Order | SSE Event | Content |
 |-------|-----------|---------|
 | 1 | `RUN_STARTED` | `{threadId, runId}` |
-| 2 | `TOOL_CALL_START` | `{toolCallId, toolCallName: "openProfilePanel"}` |
-| 3 | `TOOL_CALL_ARGS` | `{action: "openPanel", panel: "profileEditor"}` |
+| 2 | `TOOL_CALL_START` | `{toolCallId, toolCallName: "inferSkills"}` |
+| 3 | `TOOL_CALL_ARGS` | `{}` |
 | 4 | `TOOL_CALL_END` | `{toolCallId}` |
-| 5 | `TEXT_MESSAGE_START` | `{messageId, role: "assistant"}` |
-| 6 | `TEXT_MESSAGE_CONTENT` | `"I've opened the profile editor..."` |
-| 7 | `TEXT_MESSAGE_END` | `{messageId}` |
-| 8 | `RUN_FINISHED` | `{threadId, runId}` |
+| 5 | `TOOL_CALL_RESULT` | `{skills: [...], evidence: [...]}` |
+| 6 | `TEXT_MESSAGE_START` | `{messageId, role: "assistant"}` |
+| 7 | `TEXT_MESSAGE_CONTENT` | `"I've analyzed your experience and found some great skills!..."` |
+| 8 | `TEXT_MESSAGE_END` | `{messageId}` |
+| 9 | `RUN_FINISHED` | `{threadId, runId}` |
 
 **File:** `protocol/AgUiProtocolAdapter.java`
 
 #### 1.9 Browser (CopilotKit) renders the result
 
 CopilotKit parses the SSE stream:
-- `TOOL_CALL_*` events for `openProfilePanel` → `ToolRenderers` triggers the profile editor panel to slide in from the right
+- `TOOL_CALL_RESULT` for `inferSkills` → `ToolRenderers` renders an interactive **SkillsCard** showing the inferred skills with checkboxes, an "add custom skill" text field, and a "Save to profile" button
 - `TEXT_MESSAGE_*` events → rendered as chat text in the sidebar
 
-**Result:** The user sees the profile editor panel and a chat acknowledgment.
+**Result:** The user sees a SkillsCard with inferred skills they can select, deselect, or add to, plus a chat message like "I've analyzed your experience and found some great skills! Select the ones you'd like, add any I missed, and save directly from the card."
 
-**Files:** `components/integrations/copilotkit/ToolRenderers.tsx`, `components/integrations/copilotkit/CopilotKitProvider.tsx`
+**Files:** `components/integrations/copilotkit/ToolRenderers.tsx`, `components/cards/SkillsCard.tsx`
+
+> **Why not openProfilePanel?** The profile panel is **read-only** — it shows the full profile but does not allow editing. Each profile section gets its own editing mechanism: skills are edited via the SkillsCard (triggered by `inferSkills`), experience via `list_profile_entries` + `update_profile`. This separation allows each section to have a purpose-built editing UI.
 
 ---
 
@@ -679,7 +710,7 @@ Same SSE emission path as Step 1. The `AgUiProtocolAdapter` emits:
 | 8 | `TEXT_MESSAGE_END` | `{messageId}` |
 | 9 | `RUN_FINISHED` | `{threadId, runId}` |
 
-CopilotKit renders the chat text. The profile editor panel (still open from Step 1) reflects the updated skills list.
+CopilotKit renders the chat text and the SkillsCard (from Step 1) is no longer actionable since the skill has been saved directly via chat.
 
 ---
 
@@ -706,7 +737,7 @@ CopilotKit renders the chat text. The profile editor panel (still open from Step
 This scenario uses a **direct update** path. The following are **not** triggered:
 
 - **HITL (Human-in-the-Loop):** Direct chat-based skill additions bypass the approval card. HITL is triggered when the LLM calls `approveProfileUpdate` (e.g., bulk profile edits from the SkillsCard). See [06-hitl-explained.md](06-hitl-explained.md).
-- **inferSkills:** The user explicitly names the skill ("python"), so the LLM does not need to analyze the profile to infer skills. If the user had said "what skills should I add?", `inferSkills` would be called instead, returning a SkillsCard for interactive selection.
+- **openProfilePanel:** Not called because the user wants to *edit* skills, not *view* their profile. The profile panel is **read-only** and only opens when the user explicitly asks to view their profile (e.g., "show my profile"). Editing is always handled through section-specific tools.
 - **ProfileWarningAdvisor:** Only wired to the Job Discovery agent, not the Profile agent. It warns when profile score is below threshold to encourage profile improvement before job searching.
 - **SummarizationAdvisor:** Activates only when conversation history exceeds `maxMessages` (default 10). With only 2 messages, this passes through without action.
 

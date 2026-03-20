@@ -67,7 +67,7 @@ This is the most important use case. The LLM cannot wait — it runs, produces o
 
 The tool triggers a visual action in the browser with no backend logic: opening a panel, scrolling to a section, showing a modal, triggering navigation.
 
-**Example in Juno:** `openProfilePanel` — returns `{ action: "openPanel", panel: "profileEditor" }`. The backend has nothing to compute; the frontend just slides a panel in.
+**Example in Juno:** `openProfilePanel` — returns `{ action: "openPanel", panel: "profileViewer" }`. The backend has nothing to compute; the frontend just slides a read-only panel in.
 
 ### 3. Frontend Already Has Structured Data
 
