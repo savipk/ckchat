@@ -15,6 +15,7 @@ These documents explain the Juno project end-to-end for developers who need to m
 | 7 | [Swappable Layers](07-swappable-layers.md) | Why and how the frontend framework can be swapped between CopilotKit and assistant-ui | 10 min |
 | 8 | [How to Modify Things](08-how-to-modify.md) | Step-by-step guides for common tasks: add a tool, add an agent, add a card, change behavior, debug issues | 15 min |
 | 9 | [Frontend vs Backend Tools](09-frontend-vs-backend-tools.md) | When to use frontend vs backend tools, the decision tree, two input paths (chat vs card), anti-patterns | 10 min |
+| 10 | [Skills Update Flow](10-skills-update-flow.md) | End-to-end control and data flow for editing skills — sequence diagrams, tool trigger rules, score recalculation | 15 min |
 
 ## Quick Reference
 

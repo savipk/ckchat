@@ -35,7 +35,7 @@ Every request flows through three layers:
 ## Key Directories
 
 ```
-ckchat/               Juno project
+juno/
 ├── backend/          Java application (Spring Boot + Spring AI)
 │   └── src/main/
 │       ├── java/com/juno/

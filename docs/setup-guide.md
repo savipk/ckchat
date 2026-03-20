@@ -15,7 +15,7 @@
 ## 1. Clone and Navigate
 
 ```bash
-cd ckchat
+cd juno
 ```
 
 ---
@@ -156,7 +156,7 @@ mvn test
 ## 6. Project Structure
 
 ```
-ckchat/                          # Juno project
+juno/
 ├── backend/                     # Spring Boot + Spring AI
 │   ├── pom.xml                  # Maven dependencies
 │   ├── .env.example             # Azure OpenAI credentials template

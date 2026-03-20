@@ -224,7 +224,7 @@ All tools map to Spring AI `@Tool`-annotated methods on `@Component` classes:
 #### 1.1 Project Scaffolding
 
 ```
-ckchat/                                  # Juno project
+juno/
 ├── backend/                          # Spring Boot application
 │   ├── pom.xml                       # Maven, Spring Boot 3.5.x, Spring AI 1.1.x
 │   ├── src/main/java/com/juno/
