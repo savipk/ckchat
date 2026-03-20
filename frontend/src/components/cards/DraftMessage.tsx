@@ -1,7 +1,7 @@
 /**
  * Framework-agnostic DraftMessage component.
  * Displays a drafted message to a hiring manager for review.
- * Ported from autochat/public/elements/DraftMessage.jsx — same styling.
+ * Ported from juno/public/elements/DraftMessage.jsx — same styling.
  */
 
 interface DraftMessageProps {

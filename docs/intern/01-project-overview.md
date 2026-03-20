@@ -1,16 +1,16 @@
 # 1. Project Overview
 
-## What Is CkChat?
+## What Is Juno?
 
-CkChat is an **AI-powered multi-agent HR assistant**. Employees interact with a chat interface to manage their career profiles, discover internal job postings, contact hiring managers, search for candidates, and create job descriptions.
+Juno is an **AI-powered multi-agent HR assistant**. Employees interact with a chat interface to manage their career profiles, discover internal job postings, contact hiring managers, search for candidates, and create job descriptions.
 
 Behind the scenes, there isn't one giant AI — there are **6 specialized AI agents**, each expert at one task, coordinated by an orchestrator that routes your message to the right agent.
 
 ## Where Did It Come From?
 
-CkChat is the **production rewrite** of a proof-of-concept called `autochat`. The PoC validated the idea using Python/LangChain/Chainlit. CkChat rebuilds it with enterprise-grade technology for scalability, maintainability, and deployment into production infrastructure.
+Juno is the **production rewrite** of the original prototype. The prototype validated the idea using Python/LangChain/Chainlit. Juno rebuilds it with enterprise-grade technology for scalability, maintainability, and deployment into production infrastructure.
 
-The business logic, agent prompts, and tool behavior are ported 1:1 from autochat. If you ever need to understand *why* something works a certain way, the PoC at `../autochat/` is the reference implementation.
+The business logic, agent prompts, and tool behavior are ported 1:1 from Juno. If you ever need to understand *why* something works a certain way, the prototype at `../juno/` is the reference implementation.
 
 ## The Three-Layer Architecture
 
@@ -35,10 +35,10 @@ Every request flows through three layers:
 ## Key Directories
 
 ```
-ckchat/
+ckchat/               Juno project
 ├── backend/          Java application (Spring Boot + Spring AI)
 │   └── src/main/
-│       ├── java/com/ckchat/
+│       ├── java/com/juno/
 │       │   ├── controller/    HTTP endpoints
 │       │   ├── protocol/      SSE event serialization (swappable)
 │       │   ├── agent/         Orchestrator + agent wiring

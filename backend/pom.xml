@@ -11,10 +11,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.ckchat</groupId>
-    <artifactId>ckchat-backend</artifactId>
+    <groupId>com.juno</groupId>
+    <artifactId>juno-backend</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-    <name>CkChat Backend</name>
+    <name>Juno Backend</name>
     <description>HR Assistant — Spring AI multi-agent backend</description>
 
     <properties>

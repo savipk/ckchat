@@ -1,7 +1,7 @@
 /**
  * Framework-agnostic ProfileScore component.
  * Displays profile completion percentage and missing sections.
- * Ported from autochat/public/elements/ProfileScore.jsx — same styling.
+ * Ported from juno/public/elements/ProfileScore.jsx — same styling.
  */
 
 interface ProfileScoreProps {

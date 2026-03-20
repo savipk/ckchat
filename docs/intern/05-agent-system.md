@@ -6,7 +6,7 @@ This document explains how the multi-agent orchestration works — how user inte
 
 ## What Is an Agent?
 
-In CkChat, an **agent** is a Spring AI `ChatClient` — a configured connection to the LLM with:
+In Juno, an **agent** is a Spring AI `ChatClient` — a configured connection to the LLM with:
 
 1. **A system prompt** — Instructions telling the LLM how to behave (personality, rules, constraints)
 2. **Tools** — Java methods the LLM can call to fetch data or perform actions

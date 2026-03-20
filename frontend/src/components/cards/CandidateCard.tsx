@@ -1,7 +1,7 @@
 /**
  * Framework-agnostic CandidateCard component.
  * Displays an employee/candidate profile with skills and match info.
- * Ported from autochat/public/elements/CandidateCard.jsx — same styling.
+ * Ported from juno/public/elements/CandidateCard.jsx — same styling.
  */
 
 interface CandidateCardProps {

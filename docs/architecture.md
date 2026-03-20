@@ -1,8 +1,8 @@
-# CkChat Architecture
+# Juno Architecture
 
 ## Overview
 
-CkChat is a production multi-agent HR assistant migrated from the autochat PoC (LangGraph/Chainlit/Python) to Java/Spring AI with a React/CopilotKit frontend. The architecture prioritizes **frontend framework portability** — CopilotKit and assistant-ui are interchangeable with minimal effort.
+Juno is a production multi-agent HR assistant migrated from the Juno (LangGraph/Chainlit/Python) to Java/Spring AI with a React/CopilotKit frontend. The architecture prioritizes **frontend framework portability** — CopilotKit and assistant-ui are interchangeable with minimal effort.
 
 ---
 
@@ -79,7 +79,7 @@ Parsed by `AgentDefinitionLoader` at startup and used as `defaultSystem()` for e
 
 ## HITL Pattern (Human-in-the-Loop)
 
-Follows the **distributed non-blocking** pattern validated in `autochat/docs/springai/10-hitl-distributed-non-blocking.md`.
+Follows the **distributed non-blocking** pattern validated in `juno/docs/springai/10-hitl-distributed-non-blocking.md`.
 
 ### Flow
 
@@ -199,9 +199,9 @@ User Message
 
 ---
 
-## Mapping from autochat PoC
+## Mapping from Juno
 
-| autochat | ckchat | Notes |
+| Juno | juno | Notes |
 |---|---|---|
 | `BaseAgent` (Python) | Spring AI `ChatClient` | One per agent with system prompt + tools |
 | `AgentConfig` dataclass | `AgentDefinition` record | Parsed from MD files |

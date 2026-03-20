@@ -1,4 +1,4 @@
-# CkChat API Reference
+# Juno API Reference
 
 ## Endpoints
 

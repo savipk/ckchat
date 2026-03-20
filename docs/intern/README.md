@@ -1,12 +1,12 @@
-# CkChat — Developer Explainer Series
+# Juno — Developer Explainer Series
 
-These documents explain the CkChat project end-to-end for developers who need to maintain and enhance it. Read them in order — each builds on the previous.
+These documents explain the Juno project end-to-end for developers who need to maintain and enhance it. Read them in order — each builds on the previous.
 
 ## Reading Order
 
 | # | Document | What You'll Learn | Time |
 |---|---|---|---|
-| 1 | [Project Overview](01-project-overview.md) | What CkChat is, the three-layer architecture, how a message flows from browser to AI and back | 10 min |
+| 1 | [Project Overview](01-project-overview.md) | What Juno is, the three-layer architecture, how a message flows from browser to AI and back | 10 min |
 | 2 | [Tech Stack](02-tech-stack.md) | Every technology in the stack — what it does, why we use it, key concepts, and official documentation links | 20 min |
 | 3 | [Backend Deep Dive](03-backend-deep-dive.md) | Every Java package and class — controllers, protocol adapter, orchestrator, tools, advisors, services | 25 min |
 | 4 | [Frontend Deep Dive](04-frontend-deep-dive.md) | Next.js structure, how CopilotKit works, card components, tool rendering, and the data flow for rendering a job search | 15 min |
@@ -24,6 +24,6 @@ These documents explain the CkChat project end-to-end for developers who need to
 
 **To understand the full architecture:** See [Architecture](../architecture.md)
 
-**To understand the HITL specification:** See `autochat/docs/springai/10-hitl-distributed-non-blocking.md`
+**To understand the HITL specification:** See `juno/docs/springai/10-hitl-distributed-non-blocking.md`
 
 **To read agent system prompts:** See `backend/src/main/resources/agents/*.md`

@@ -271,7 +271,7 @@ Swap the Maven dependency from `spring-ai-starter-model-azure-openai` to the new
 
 ### Backend
 
-1. Set `logging.level.com.ckchat: DEBUG` in `application.yml`
+1. Set `logging.level.com.juno: DEBUG` in `application.yml`
 2. `SimpleLoggerAdvisor` logs all LLM requests and responses
 3. Check console output for: routing decision, tool calls, LLM response text
 

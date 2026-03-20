@@ -19,7 +19,7 @@ Use a backend tool when the tool **needs server-side resources** or the **LLM ne
 
 The tool needs to query a database, call an internal API, or read from a data service the browser cannot (and should not) access directly.
 
-**Examples in CkChat:**
+**Examples in Juno:**
 - `getMatches` — queries `JobDataService` for matching jobs
 - `searchCandidates` — queries `EmployeeDirectoryService`
 - `profileAnalyzer` — reads the profile via `ProfileManager` and computes a score via `ProfileScoreService`
@@ -59,7 +59,7 @@ This is the most important use case. The LLM cannot wait — it runs, produces o
 2. Closing the SSE stream (server thread released, zero resources held)
 3. Resuming on a new request when the user decides
 
-**Example in CkChat:** `approveProfileUpdate` — the LLM proposes a profile change, the frontend shows a before/after diff with Accept/Decline buttons, and the backend only executes the mutation after explicit approval.
+**Example in Juno:** `approveProfileUpdate` — the LLM proposes a profile change, the frontend shows a before/after diff with Accept/Decline buttons, and the backend only executes the mutation after explicit approval.
 
 **Rule:** If a human needs to act between the tool call and the next step, it must be a frontend tool.
 
@@ -67,7 +67,7 @@ This is the most important use case. The LLM cannot wait — it runs, produces o
 
 The tool triggers a visual action in the browser with no backend logic: opening a panel, scrolling to a section, showing a modal, triggering navigation.
 
-**Example in CkChat:** `openProfilePanel` — returns `{ action: "openPanel", panel: "profileEditor" }`. The backend has nothing to compute; the frontend just slides a panel in.
+**Example in Juno:** `openProfilePanel` — returns `{ action: "openPanel", panel: "profileEditor" }`. The backend has nothing to compute; the frontend just slides a panel in.
 
 ### 3. Frontend Already Has Structured Data
 
@@ -164,7 +164,7 @@ Some tools could go either way. Use these questions:
 
 ---
 
-## CkChat Examples
+## Juno Examples
 
 | Tool | Type | Why |
 |---|---|---|

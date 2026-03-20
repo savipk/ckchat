@@ -1,7 +1,7 @@
 /**
  * Framework-agnostic ProfileApproval component.
  * Displays before/after diff and completion score delta for profile updates.
- * Ported from autochat/public/elements/ProfileUpdateConfirmation.jsx — same styling.
+ * Ported from juno/public/elements/ProfileUpdateConfirmation.jsx — same styling.
  *
  * The HITL hook wrapper (useHumanInTheLoop in CopilotKit, or equivalent in assistant-ui)
  * calls this component and passes the respond() callback.

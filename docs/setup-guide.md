@@ -1,4 +1,4 @@
-# CkChat Setup Guide
+# Juno Setup Guide
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@
 ## 1. Clone and Navigate
 
 ```bash
-cd /Users/savikuriakose/projects/ckchat
+cd ckchat
 ```
 
 ---
@@ -130,13 +130,13 @@ Open two terminals:
 
 **Terminal 1 — Backend:**
 ```bash
-cd /Users/savikuriakose/projects/ckchat/backend
+cd backend
 export $(cat .env | xargs) && mvn spring-boot:run
 ```
 
 **Terminal 2 — Frontend:**
 ```bash
-cd /Users/savikuriakose/projects/ckchat/frontend
+cd frontend
 npm run dev
 ```
 
@@ -156,13 +156,13 @@ mvn test
 ## 6. Project Structure
 
 ```
-ckchat/
+ckchat/                          # Juno project
 ├── backend/                     # Spring Boot + Spring AI
 │   ├── pom.xml                  # Maven dependencies
 │   ├── .env.example             # Azure OpenAI credentials template
 │   └── src/main/
-│       ├── java/com/ckchat/
-│       │   ├── CkChatApplication.java   # Entry point
+│       ├── java/com/juno/
+│       │   ├── JunoApplication.java   # Entry point
 │       │   ├── config/          # AgentConfig, CorsConfig
 │       │   ├── protocol/        # ProtocolAdapter (swappable), AgentResponse, RunAgentInput
 │       │   ├── controller/      # AgentController (SSE endpoint)
@@ -206,10 +206,10 @@ ckchat/
 | `spring.ai.azure.openai.chat.options.deployment-name` | `gpt-4o` | Azure deployment name |
 | `spring.ai.azure.openai.chat.options.temperature` | `0.7` | LLM temperature |
 | `server.port` | `8080` | Backend port |
-| `ckchat.agents.config-path` | `classpath:agents/*.md` | Agent definition files |
-| `ckchat.conversation.max-messages-before-summarization` | `10` | Message count before summarizing |
-| `ckchat.conversation.messages-to-keep-after-summarization` | `5` | Messages retained after summarization |
-| `ckchat.conversation.profile-low-completion-threshold` | `50` | Score threshold for profile warning |
+| `juno.agents.config-path` | `classpath:agents/*.md` | Agent definition files |
+| `juno.conversation.max-messages-before-summarization` | `10` | Message count before summarizing |
+| `juno.conversation.messages-to-keep-after-summarization` | `5` | Messages retained after summarization |
+| `juno.conversation.profile-low-completion-threshold` | `50` | Score threshold for profile warning |
 
 ---
 

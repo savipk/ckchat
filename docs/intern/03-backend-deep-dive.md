@@ -7,8 +7,8 @@ This document walks through every backend package, class by class, explaining wh
 ## Package Map
 
 ```
-com.ckchat/
-├── CkChatApplication.java     Entry point
+com.juno/
+├── JunoApplication.java     Entry point
 ├── config/                        Spring beans + wiring
 ├── controller/                    HTTP endpoints
 ├── protocol/                      SSE serialization (swappable)
@@ -23,19 +23,19 @@ com.ckchat/
 
 ## Entry Point
 
-### `CkChatApplication.java`
+### `JunoApplication.java`
 
 ```java
 @SpringBootApplication
-public class CkChatApplication {
+public class JunoApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CkChatApplication.class, args);
+        SpringApplication.run(JunoApplication.class, args);
     }
 }
 ```
 
 This is the starting point. `@SpringBootApplication` tells Spring to:
-1. Scan all packages under `com.ckchat` for `@Component`, `@Service`, `@Controller` classes
+1. Scan all packages under `com.juno` for `@Component`, `@Service`, `@Controller` classes
 2. Auto-configure beans based on what's on the classpath (e.g., Spring AI's `ChatModel` for Azure OpenAI)
 3. Start the HTTP server
 

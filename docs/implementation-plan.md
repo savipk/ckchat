@@ -1,8 +1,8 @@
-# CkChat Implementation Plan
+# Juno Implementation Plan
 
 ## Production Architecture: React + CopilotKit + AG-UI + Spring AI + Azure OpenAI
 
-This document is the implementation plan for migrating the **autochat** PoC (LangGraph/Chainlit/Python) to a production-grade system using the tech stack below. The vetted HITL document (`autochat/docs/springai/10-hitl-distributed-non-blocking.md`) and agent MD configs (`autochat/docs/springai/agent_md_config/`) are adopted as-is and referenced throughout.
+This document is the implementation plan for migrating the **Juno** (LangGraph/Chainlit/Python) to a production-grade system using the tech stack below. The vetted HITL document (`juno/docs/springai/10-hitl-distributed-non-blocking.md`) and agent MD configs (`juno/docs/springai/agent_md_config/`) are adopted as-is and referenced throughout.
 
 ### Frontend Portability Principle
 
@@ -17,7 +17,7 @@ The Spring AI backend, all domain services, agent logic, tools, and React card c
 
 ## 1. Tech Stack
 
-| Layer | PoC (autochat) | Production (ckchat) |
+| Layer | Prototype (Juno) | Production (Juno) |
 |-------|-----------------|------------------------|
 | **Frontend** | Chainlit (Python-hosted React elements) | Next.js + React + CopilotKit SDK (MVP) / assistant-ui (swappable) |
 | **Frontend ↔ Backend Protocol** | Chainlit WebSocket (proprietary) | AG-UI Protocol (SSE over HTTP POST) — via swappable `ProtocolAdapter` |
@@ -26,7 +26,7 @@ The Spring AI backend, all domain services, agent logic, tools, and React card c
 | **LLM Provider** | Azure OpenAI (via `langchain-openai`) | Azure OpenAI (via `spring-ai-starter-model-azure-openai`) |
 | **Agent State / Memory** | LangGraph checkpointer + SQLite | Spring AI `ChatMemory` + Cosmos DB / PostgreSQL |
 | **Conversation Persistence** | SQLite (`data/data.db`) | Cosmos DB (primary) or PostgreSQL |
-| **Profile / Data Store** | JSON files (`data/*.json`) | JSON files (Phase 1, same as PoC) → Cosmos DB (Phase 2) |
+| **Profile / Data Store** | JSON files (`data/*.json`) | JSON files (Phase 1, same as prototype) → Cosmos DB (Phase 2) |
 | **API Style** | REST routes bolted onto Chainlit | Spring Boot REST + SSE endpoints |
 | **Auth** | Chainlit password callback | Spring Security (OAuth2 / Entra ID) |
 | **Build Tools** | pip / requirements.txt | Maven (backend), Next.js (frontend) |
@@ -135,11 +135,11 @@ The Spring AI backend, all domain services, agent logic, tools, and React card c
 
 ---
 
-## 3. Component Mapping: autochat → ckchat
+## 3. Component Mapping: Juno → juno
 
 ### 3.1 Agent Framework
 
-| autochat Component | ckchat Equivalent | Notes |
+| Juno Component | juno Equivalent | Notes |
 |---|---|---|
 | `BaseAgent` (`core/agent/base.py`) | Spring AI `ChatClient` per agent | Each agent = a `ChatClient` configured with system prompt, tools, advisors |
 | `AgentConfig` dataclass | `AgentDefinition` record | Parsed from agent MD files in `docs/springai/agent_md_config/` |
@@ -151,7 +151,7 @@ The Spring AI backend, all domain services, agent logic, tools, and React card c
 
 ### 3.2 Middleware → Advisors
 
-| autochat Middleware | ckchat Advisor | Implementation |
+| Juno Middleware | juno Advisor | Implementation |
 |---|---|---|
 | `SummarizationMiddleware` | `SummarizationAdvisor implements CallAdvisor` | Counts messages, summarizes when threshold exceeded |
 | `tool_monitor_middleware` | Spring AI Observability (Micrometer) | Built-in; traces tool calls with timing via `SimpleLoggerAdvisor` |
@@ -165,7 +165,7 @@ The Spring AI backend, all domain services, agent logic, tools, and React card c
 
 All tools map to Spring AI `@Tool`-annotated methods on `@Component` classes:
 
-| autochat Tool | Spring AI Component | `@Tool` Method |
+| Juno Tool | Spring AI Component | `@Tool` Method |
 |---|---|---|
 | `profile_analyzer` | `ProfileTools` | `analyzeProfile()` |
 | `update_profile` | `ProfileTools` | `updateProfile(section, updates, operation, entryId)` |
@@ -189,7 +189,7 @@ All tools map to Spring AI `@Tool`-annotated methods on `@Component` classes:
 
 ### 3.4 Frontend Components
 
-| autochat Element | ckchat Component | Rendering Mechanism |
+| Juno Element | juno Component | Rendering Mechanism |
 |---|---|---|
 | `JobCard.jsx` (Chainlit custom element) | `<JobCard />` React component | `useRenderTool("get_matches", ...)` |
 | `ProfileScore.jsx` | `<ProfileScore />` | `useRenderTool("profile_analyzer", ...)` |
@@ -204,7 +204,7 @@ All tools map to Spring AI `@Tool`-annotated methods on `@Component` classes:
 
 ### 3.5 Data Layer
 
-| autochat | ckchat (Phase 1) | ckchat (Phase 2) |
+| Juno | juno (Phase 1) | juno (Phase 2) |
 |---|---|---|
 | `data/miro_profile.json` etc. | Same JSON files loaded via `ProfileManager` | Cosmos DB document per user |
 | `data/matching_jobs.json` | Same JSON file loaded via `JobDataService` | Cosmos DB collection or external API |
@@ -224,11 +224,11 @@ All tools map to Spring AI `@Tool`-annotated methods on `@Component` classes:
 #### 1.1 Project Scaffolding
 
 ```
-ckchat/
+ckchat/                                  # Juno project
 ├── backend/                          # Spring Boot application
 │   ├── pom.xml                       # Maven, Spring Boot 3.5.x, Spring AI 1.1.x
-│   ├── src/main/java/com/ckchat/
-│   │   ├── CkChatApplication.java
+│   ├── src/main/java/com/juno/
+│   │   ├── JunoApplication.java
 │   │   ├── config/
 │   │   │   ├── AzureOpenAiConfig.java       # ChatModel bean (Azure OpenAI)
 │   │   │   ├── AgentConfig.java             # Agent registry, ChatClient beans
@@ -277,12 +277,12 @@ ckchat/
 │   │   │   ├── outreach.md
 │   │   │   ├── candidate-search.md
 │   │   │   └── jd-generator.md
-│   │   └── data/                            # Same data files from autochat
+│   │   └── data/                            # Same data files from Juno
 │   │       ├── matching_jobs.json
 │   │       ├── employee_directory.json
 │   │       ├── job_requisitions.json
 │   │       └── sample_profile.json
-│   └── src/test/java/com/ckchat/
+│   └── src/test/java/com/juno/
 │       └── ...
 ├── frontend/                         # Next.js + React
 │   ├── package.json
@@ -391,7 +391,7 @@ spring:
             deployment-name: ${AZURE_OPENAI_DEPLOYMENT_NAME:gpt-4o}
             temperature: 0.7
 
-ckchat:
+juno:
   agents:
     config-path: classpath:agents/       # Agent MD files
   data:
@@ -462,13 +462,13 @@ public class AgUiController {
 
 #### 1.5 Agent Definition Loader
 
-Reads the agent MD files (from `autochat/docs/springai/agent_md_config/`) and creates `AgentDefinition` records.
+Reads the agent MD files (from `juno/docs/springai/agent_md_config/`) and creates `AgentDefinition` records.
 
 ```java
 @Component
 public class AgentDefinitionLoader {
 
-    @Value("${ckchat.agents.config-path}")
+    @Value("${juno.agents.config-path}")
     private String configPath;
 
     /**
@@ -493,7 +493,7 @@ public record AgentDefinition(
 
 #### 1.6 Orchestrator Service
 
-Maps from autochat's `OrchestratorAgent` + `_create_sub_agent()` pattern.
+Maps from Juno's `OrchestratorAgent` + `_create_sub_agent()` pattern.
 
 ```java
 @Service
@@ -551,7 +551,7 @@ public class OrchestratorService {
 
 ### Phase 2: All Agents + Tools (Backend Feature Parity)
 
-**Goal**: All 5 specialist agents operational with all 19 tools, matching PoC behavior.
+**Goal**: All 5 specialist agents operational with all 19 tools, matching prototype behavior.
 
 #### 2.1 Agent Implementation Order
 
@@ -588,7 +588,7 @@ ChatClient profileClient = ChatClient.builder(chatModel)
     .build();
 ```
 
-**Key services** (direct ports from autochat):
+**Key services** (direct ports from Juno):
 
 - `ProfileManager` — `load()`, `saveDraft()`, `submit()`, `rollback()`, backup rotation (max 5)
 - `ProfileScoreService` — `computeCompletionScore()`, `simulateUpdateScore()` (deep-copy, no persist)
@@ -726,7 +726,7 @@ function App() {
 
 #### 3.3 Tool Renderers (Rich UI Cards)
 
-Each autochat Chainlit element maps to a CopilotKit tool renderer. Port the existing JSX from `public/elements/` with minimal changes — same styling, same data structure:
+Each Juno Chainlit element maps to a CopilotKit tool renderer. Port the existing JSX from `public/elements/` with minimal changes — same styling, same data structure:
 
 ```tsx
 // frontend/src/components/tools/index.tsx
@@ -782,7 +782,7 @@ No changes to the vetted implementation — it maps 1:1.
 
 #### 3.5 Styling
 
-Port the existing style guide from autochat's `CLAUDE.md`:
+Port the existing style guide from Juno's `CLAUDE.md`:
 
 | Element | Style |
 |---|---|
@@ -801,7 +801,7 @@ Port the existing style guide from autochat's `CLAUDE.md`:
 | 2 | React app with CopilotChat rendering text responses | End-to-end text flow |
 | 3 | JobCard rendered for `get_matches` tool results | Tool result → UI |
 | 4 | ProfileApproval HITL card (approve/decline) | Full HITL roundtrip |
-| 5 | All 9 tool renderers ported from autochat | UI parity |
+| 5 | All 9 tool renderers ported from Juno | UI parity |
 | 6 | Chat persistence across page refreshes (same threadId) | Stateful conversations |
 
 ---
@@ -842,13 +842,13 @@ spring:
       cosmos:
         endpoint: ${COSMOS_ENDPOINT}
         key: ${COSMOS_KEY}
-        database: ckchat
+        database: juno
   ai:
     chat:
       memory:
         repository:
           cosmos-db:
-            database-name: ckchat
+            database-name: juno
             container-name: chat_memory
 ```
 
@@ -875,7 +875,7 @@ management:
         include: health, metrics, prometheus
   metrics:
     tags:
-      application: ckchat
+      application: juno
 
 # Spring AI has built-in Micrometer support
 spring:
@@ -889,8 +889,8 @@ spring:
 Key metrics to track:
 - `spring.ai.chat.client.duration` — LLM call latency per agent
 - `spring.ai.tool.call.duration` — Tool execution time
-- Custom: `ckchat.hitl.pending` — Gauge of conversations awaiting approval
-- Custom: `ckchat.agent.routing` — Counter of routes per agent
+- Custom: `juno.hitl.pending` — Gauge of conversations awaiting approval
+- Custom: `juno.agent.routing` — Counter of routes per agent
 
 #### 4.4 Deliverables — Phase 4
 
@@ -907,7 +907,7 @@ Key metrics to track:
 
 ## 5. HITL Flow (Reference)
 
-The HITL implementation follows `autochat/docs/springai/10-hitl-distributed-non-blocking.md` verbatim. Key points:
+The HITL implementation follows `juno/docs/springai/10-hitl-distributed-non-blocking.md` verbatim. Key points:
 
 1. **Two-stream pattern**: Stream 1 detects HITL tool, emits events, persists state, closes. Stream 2 resumes on any server.
 2. **Zero threads held** during user decision time. Zero server resources consumed.
@@ -922,7 +922,7 @@ See the full sequence diagram, state transitions, and data flow in the reference
 
 ## 6. Agent System Prompts (Reference)
 
-Agent system prompts are defined in markdown files at `autochat/docs/springai/agent_md_config/`:
+Agent system prompts are defined in markdown files at `juno/docs/springai/agent_md_config/`:
 
 | File | Agent | Key Aspects |
 |---|---|---|
@@ -962,7 +962,7 @@ The `AgUiEventEmitter` helper class serializes these events into SSE-compatible 
 | 2 | **Streaming** | **Request/response for Phase 1**, migrate to full streaming in Phase 2 | Unblocks faster; streaming adds `StreamAdvisor` complexity |
 | 3 | **Agent MD files** | **Classpath** (bundled in JAR) | Simplest; hot-reload is Phase 4 |
 | 4 | **Profile storage** | **Cosmos DB** for Phase 2 | Aligns with data layer; PostgreSQL available if relational queries needed |
-| 5 | **Multi-user profiles** | **JWT claim → profile ID** (Phase 1: file path, Phase 2: Cosmos partition key) | Same pattern as autochat auth callback |
+| 5 | **Multi-user profiles** | **JWT claim → profile ID** (Phase 1: file path, Phase 2: Cosmos partition key) | Same pattern as Juno auth callback |
 | 6 | **Side panels** | **App-level state** triggered by tool results (not protocol-specific events) | Framework-agnostic; works with CopilotKit or assistant-ui |
 | 7 | **Build tool** | **Maven** | Enterprise standard for Spring Boot |
 | 8 | **Frontend tooling** | **Next.js** | Hosts CopilotKit runtime as API route; supports both CopilotKit and assistant-ui |
@@ -987,7 +987,7 @@ The `AgUiEventEmitter` helper class serializes these events into SSE-compatible 
 
 | Criterion | Measurement |
 |---|---|
-| **Functional parity** | All 5 agents + 19 tools operational with same behavior as autochat PoC |
+| **Functional parity** | All 5 agents + 19 tools operational with same behavior as Juno |
 | **HITL works distributed** | Profile update approval/decline flows correctly across different server instances |
 | **Streaming UX** | User sees tokens streaming in real-time, not waiting for full response |
 | **Rich UI cards** | All 9 card types render correctly in CopilotKit chat |

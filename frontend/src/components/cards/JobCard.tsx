@@ -1,7 +1,7 @@
 /**
  * Framework-agnostic JobCard component.
  * Displays a job posting with match score, skills, and hiring manager info.
- * Ported from autochat/public/elements/JobCard.jsx — same styling.
+ * Ported from juno/public/elements/JobCard.jsx — same styling.
  *
  * This component is NEVER changed when switching frontend frameworks.
  * Only the integration wrapper (copilotkit/ToolRenderers or assistant-ui/ToolRenderers) changes.

@@ -226,7 +226,7 @@ public int simulateUpdateScore(String section, Map<String, Object> updates, Stri
 ## The Full Design Document
 
 For the complete specification with sequence diagrams, state transitions, and validation findings, see:
-`../autochat/docs/springai/10-hitl-distributed-non-blocking.md`
+`../juno/docs/springai/10-hitl-distributed-non-blocking.md`
 
 This document was vetted against Spring AI, AG-UI, and CopilotKit documentation and is the authoritative reference.
 

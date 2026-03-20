@@ -66,7 +66,7 @@ public class VercelAiProtocolAdapter implements ProtocolAdapter { ... }
 
 Option B: Configuration property
 ```yaml
-ckchat:
+juno:
   frontend: copilotkit  # or assistant-ui
 ```
 
@@ -171,7 +171,7 @@ To switch from CopilotKit to assistant-ui:
 
 | Step | File | Change |
 |---|---|---|
-| 1 | `backend/application.yml` | Set `ckchat.frontend: assistant-ui` (if using profile-based swap) |
+| 1 | `backend/application.yml` | Set `juno.frontend: assistant-ui` (if using profile-based swap) |
 | 2 | `frontend/src/app/page.tsx` | Change import from `copilotkit/CopilotKitProvider` to `assistant-ui/AssistantUiProvider` |
 | 3 | `frontend/src/components/integrations/assistant-ui/` | Implement `AssistantUiProvider.tsx` and `ToolRenderers.tsx` |
 | 4 | `frontend/src/app/api/` | Replace `copilotkit/route.ts` with assistant-ui runtime handler |

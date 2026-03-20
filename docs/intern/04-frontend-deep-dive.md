@@ -171,7 +171,7 @@ Shows a drafted message to a hiring manager with To/From/Re fields and the messa
 
 ### Styling Convention
 
-All cards follow the style guide from the PoC:
+All cards follow the style guide from the prototype:
 
 | Element | Style |
 |---|---|
