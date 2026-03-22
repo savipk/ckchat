@@ -25,6 +25,5 @@ const runtime = new CopilotRuntime({
 });
 
 export const POST = async (req: Request) => {
-  const { handleRequest } = runtime;
-  return handleRequest(req, new ExperimentalEmptyAdapter());
+  return runtime.handleServiceAdapter(req, new ExperimentalEmptyAdapter());
 };
