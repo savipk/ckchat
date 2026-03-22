@@ -55,7 +55,7 @@ public class SummarizationAdvisor implements CallAroundAdvisor {
             kept.addAll(nonSystem.subList(startIdx, nonSystem.size()));
 
             request = AdvisedRequest.from(request)
-                    .withMessages(kept)
+                    .messages(kept)
                     .build();
         }
 

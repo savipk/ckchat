@@ -51,7 +51,7 @@ public class ProfileWarningAdvisor implements CallAroundAdvisor {
             ));
 
             request = AdvisedRequest.from(request)
-                    .withMessages(messages)
+                    .messages(messages)
                     .build();
         }
 
