@@ -232,7 +232,7 @@ if command -v unzip >/dev/null; then
 else
   tar xzf${MVNW_VERBOSE:+"v"} "$TMP_DOWNLOAD_DIR/$distributionFilename" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
 fi
-printf %s\\n "$TMP_DOWNLOAD_DIR/$distributionFilename" | sed 's|.*[/\\]||;s|\.zip$||;s|\.tar\.gz$||' | while IFS= read -r dirName; do
+printf %s\\n "$TMP_DOWNLOAD_DIR/$distributionFilename" | sed 's|.*[/\\]||;s|\.zip$||;s|\.tar\.gz$||;s|-bin$||' | while IFS= read -r dirName; do
   mv -- "$TMP_DOWNLOAD_DIR/$dirName" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move"
 done
 
