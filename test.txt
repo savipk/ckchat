@@ -1,0 +1,2 @@
+node -e "const { CopilotRuntime } = require('@copilotkit/runtime'); const r = new CopilotRuntime();
+  console.log(r.handleServiceAdapter.toString().slice(0, 300))"
