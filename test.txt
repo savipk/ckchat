@@ -1,13 +1,2 @@
-1. Check how CopilotRuntime processes the agents config:
-  node -e "
-  const { CopilotRuntime } = require('@copilotkit/runtime');
-  const { HttpAgent } = require('@ag-ui/client');
-  const r = new CopilotRuntime({
-    agents: [new HttpAgent({ agentId: 'default', url: 'http://localhost:8080' })]
-  });
-  console.log('runtimeArgs keys:', Object.keys(r.runtimeArgs));
-  console.log('agents:', r.runtimeArgs.agents);
-  "
-
-  2. Check what exports @copilotkit/runtime has related to agents:  node -e "const m = require('@copilotkit/runtime'); console.log(Object.keys(m).filter(k =>
-  /[Aa]gent|[Rr]emote|[Ee]ndpoint/.test(k)))"
+node -e "const { LangGraphHttpAgent } = require('@copilotkit/runtime/langgraph'); console.log(typeof
+  LangGraphHttpAgent)"
