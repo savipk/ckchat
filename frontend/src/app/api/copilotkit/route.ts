@@ -2,8 +2,8 @@ import {
   CopilotRuntime,
   ExperimentalEmptyAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
-  LangGraphHttpAgent,
 } from "@copilotkit/runtime";
+import { LangGraphHttpAgent } from "@copilotkit/runtime/langgraph";
 
 /**
  * Next.js API route hosting the CopilotKit Runtime.

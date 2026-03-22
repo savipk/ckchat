@@ -9,6 +9,5 @@
   console.log('agents:', r.runtimeArgs.agents);
   "
 
-  2. Check what exports @copilotkit/runtime has related to agents:
-  node -e "const m = require('@copilotkit/runtime'); console.log(Object.keys(m).filter(k =>
+  2. Check what exports @copilotkit/runtime has related to agents:  node -e "const m = require('@copilotkit/runtime'); console.log(Object.keys(m).filter(k =>
   /[Aa]gent|[Rr]emote|[Ee]ndpoint/.test(k)))"
