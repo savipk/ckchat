@@ -165,7 +165,10 @@ juno/
 │   ├── pom.xml                  # Maven dependencies (aligned with cloud env)
 │   ├── mvnw                     # Maven Wrapper (no Maven install needed)
 │   ├── mvnw.cmd                 # Maven Wrapper (Windows)
-│   ├── .mvn/wrapper/            # Maven Wrapper config
+│   ├── .mvn/
+│   │   ├── wrapper/             # Maven Wrapper config (downloads Maven 3.9.9 via Nexus)
+│   │   ├── settings.xml         # Maven settings (Nexus repos, mirrors, deployment targets)
+│   │   └── maven.config         # Maven CLI defaults (batch-mode, errors, fail-at-end)
 │   ├── .env.example             # Azure OpenAI credentials template
 │   └── src/main/
 │       ├── java/com/juno/
