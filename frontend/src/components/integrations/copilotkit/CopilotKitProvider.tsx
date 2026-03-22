@@ -13,7 +13,7 @@ import { ToolRenderers } from "./ToolRenderers";
  */
 export function CopilotKitProvider() {
   return (
-    <CopilotKit runtimeUrl="/api/copilotkit">
+    <CopilotKit runtimeUrl="/api/copilotkit" agent="hr-assistant">
       <div className="flex h-screen">
         <main className="flex-1 flex items-center justify-center bg-gray-50">
           <div className="text-center max-w-md">
