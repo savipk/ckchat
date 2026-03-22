@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8084",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@ag-ui/client": "^0.0.1",
+    "@ag-ui/client": "^0.0.47",
     "@copilotkit/react-core": "^1.54.0",
     "@copilotkit/react-ui": "^1.54.0",
     "@copilotkit/runtime": "^1.54.0",

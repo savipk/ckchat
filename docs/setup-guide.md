@@ -120,11 +120,11 @@ Default is `http://localhost:8080/api/agent/run` — no `.env.local` needed if u
 npm run dev
 ```
 
-The frontend starts on **http://localhost:3000**.
+The frontend starts on **http://localhost:8084**.
 
 ### 3.4 Open in Browser
 
-Navigate to **http://localhost:3000**. The CopilotKit sidebar should open with the HR Assistant greeting.
+Navigate to **http://localhost:8084**. The CopilotKit sidebar should open with the HR Assistant greeting.
 
 ---
 
@@ -144,7 +144,7 @@ cd frontend
 npm run dev
 ```
 
-Then open **http://localhost:3000**.
+Then open **http://localhost:8084**.
 
 ---
 
@@ -216,7 +216,7 @@ juno/
 | `spring.ai.azure.openai.chat.options.deployment-name` | `gpt-4o` | Azure deployment name |
 | `spring.ai.azure.openai.chat.options.temperature` | `0.7` | LLM temperature |
 | `server.port` | `8080` | Backend port |
-| `juno.cors.allowed-origins` | `http://localhost:3000,http://localhost:4000` | CORS origins (override via `JUNO_CORS_ORIGINS` env var for DevPod/cloud) |
+| `juno.cors.allowed-origins` | `http://localhost:8084,http://localhost:4000` | CORS origins (override via `JUNO_CORS_ORIGINS` env var for DevPod/cloud) |
 | `juno.agents.config-path` | `classpath:agents/*.md` | Agent definition files |
 | `juno.conversation.max-messages-before-summarization` | `10` | Message count before summarizing |
 | `juno.conversation.messages-to-keep-after-summarization` | `5` | Messages retained after summarization |
@@ -290,6 +290,6 @@ Reverse the three steps above. Both integration folders coexist in the codebase.
 | `mvnw: Permission denied` | Run `chmod +x mvnw` to make the wrapper executable. |
 | `JAVA_HOME not set` | Ensure Java 21+ is installed and `JAVA_HOME` points to it. |
 | `No agent definitions loaded` | Check `agents/*.md` files exist in `src/main/resources/agents/` |
-| `CORS error in browser` | Set `JUNO_CORS_ORIGINS` env var to your frontend URL. Defaults to `localhost:3000,localhost:4000`. |
+| `CORS error in browser` | Set `JUNO_CORS_ORIGINS` env var to your frontend URL. Defaults to `localhost:8084,localhost:4000`. |
 | `SSE stream closes immediately` | Check backend logs for errors. Ensure Azure OpenAI credentials are valid. |
 | `npm install fails` | Ensure Node.js 18+ and npm 9+. Try `rm -rf node_modules && npm install`. |

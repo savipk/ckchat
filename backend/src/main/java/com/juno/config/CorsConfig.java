@@ -16,7 +16,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${juno.cors.allowed-origins:http://localhost:3000,http://localhost:4000}")
+    @Value("${juno.cors.allowed-origins:http://localhost:8084,http://localhost:4000}")
     private List<String> allowedOrigins;
 
     @Bean
