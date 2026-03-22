@@ -3,7 +3,6 @@ import {
   ExperimentalEmptyAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
-import { HttpAgent } from "@ag-ui/client";
 
 /**
  * Next.js API route hosting the CopilotKit Runtime.
@@ -17,11 +16,10 @@ const SPRING_BACKEND_URL =
   process.env.SPRING_BACKEND_URL || "http://localhost:8080/api/agent/run";
 
 const runtime = new CopilotRuntime({
-  agents: [
-    new HttpAgent({
-      agentId: "hr-assistant",
+  remoteEndpoints: [
+    {
       url: SPRING_BACKEND_URL,
-    }),
+    },
   ],
 });
 
