@@ -1,6 +1,7 @@
 import {
   CopilotRuntime,
   ExperimentalEmptyAdapter,
+  copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
 import { HttpAgent } from "@ag-ui/client";
 
@@ -25,5 +26,10 @@ const runtime = new CopilotRuntime({
 });
 
 export const POST = async (req: Request) => {
-  return runtime.handleServiceAdapter(req, new ExperimentalEmptyAdapter());
+  const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
+    runtime,
+    serviceAdapter: new ExperimentalEmptyAdapter(),
+    endpoint: "/api/copilotkit",
+  });
+  return handleRequest(req);
 };
