@@ -13,6 +13,8 @@ server:
   port: 8080
 
 juno:
+  cors:
+    allowed-origins: ${JUNO_CORS_ORIGINS:http://localhost:3000,http://localhost:4000}
   agents:
     config-path: classpath:agents/*.md
   data:

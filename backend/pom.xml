@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.4.0</version>
         <relativePath/>
     </parent>
 
@@ -16,14 +16,46 @@
     <version>0.1.0-SNAPSHOT</version>
     <name>Juno Backend</name>
     <description>HR Assistant — Spring AI multi-agent backend</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>21</java.version>
+
+        <!-- Spring ecosystem versions — aligned with cloud env -->
         <spring-ai.version>1.0.0-M6</spring-ai.version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud-azure.version>5.19.0</spring-cloud-azure.version>
+
+        <!-- Azure -->
+        <azure-search-documents.version>11.8.0-beta.4</azure-search-documents.version>
+        <azure.functions.maven.plugin.version>1.35.0</azure.functions.maven.plugin.version>
+
+        <!-- Lombok / MapStruct -->
+        <lombok.version>1.18.34</lombok.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+
+        <!-- Code quality -->
+        <jacoco.version>0.8.12</jacoco.version>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.azure.spring</groupId>
+                <artifactId>spring-cloud-azure-dependencies</artifactId>
+                <version>${spring-cloud-azure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
@@ -59,6 +91,20 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
 
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -80,10 +126,150 @@
 
     <build>
         <plugins>
+            <!-- Spotless Code Formatting -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.44.0</version>
+                <configuration>
+                    <java>
+                        <toggleOffOn/>
+                        <formatAnnotations/>
+                    </java>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Compiler — Lombok + MapStruct annotation processors -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Amapstruct.verbose=true</arg>
+                        <arg>-Amapstruct.defaultComponentModel=spring</arg>
+                        <arg>-Amapstruct.defaultInjectionStrategy=constructor</arg>
+                        <arg>-Amapstruct.unmappedTargetPolicy=ERROR</arg>
+                        <arg>-Amapstruct.unmappedSourcePolicy=WARN</arg>
+                        <arg>-Amapstruct.nullValueIterableMappingStrategy=RETURN_NULL</arg>
+                        <arg>-Amapstruct.nullValueMappingStrategy=RETURN_NULL</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- Spring Boot — exclude Lombok from final JAR -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Dependency Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven Surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${argLine} -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
+                </configuration>
+            </plugin>
+
+            <!-- JaCoCo Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/configuration/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/domain/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Azure Functions -->
+            <plugin>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>${azure.functions.maven.plugin.version}</version>
+                <configuration>
+                    <appSettings>
+                        <property>
+                            <name>FUNCTIONS_EXTENSION_VERSION</name>
+                        </property>
+                    </appSettings>
+                    <runtime>
+                        <os>linux</os>
+                        <javaVersion>21</javaVersion>
+                    </runtime>
+                </configuration>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.11.2</version>
+                    <configuration>
+                        <failOnError>false</failOnError>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

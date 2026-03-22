@@ -5,7 +5,7 @@
 | Tool | Version | Check |
 |------|---------|-------|
 | **Java** | 21+ | `java -version` |
-| **Maven** | 3.9+ | `mvn -version` |
+| **Maven** | 3.9+ (included via Maven Wrapper) | `./mvnw -version` |
 | **Node.js** | 18+ | `node -version` |
 | **npm** | 9+ | `npm -version` |
 | **Azure OpenAI** | API key + endpoint | Azure Portal |
@@ -40,19 +40,23 @@ AZURE_OPENAI_API_VERSION=2024-02-01
 
 ### 2.2 Build
 
+The project includes a Maven Wrapper (`mvnw`), so you **do not need Maven installed** — just Java 21+.
+
 ```bash
 cd backend
-mvn clean install -DskipTests
+./mvnw clean install -DskipTests
 ```
+
+> **Note:** On first run, the wrapper downloads Maven 3.9.9 automatically to `~/.m2/wrapper/`.
 
 ### 2.3 Run
 
 ```bash
 # Option A: with env file (requires dotenv plugin or shell export)
-export $(cat .env | xargs) && mvn spring-boot:run
+export $(cat .env | xargs) && ./mvnw spring-boot:run
 
 # Option B: pass vars directly
-AZURE_OPENAI_API_KEY=xxx AZURE_OPENAI_ENDPOINT=https://xxx.openai.azure.com/ mvn spring-boot:run
+AZURE_OPENAI_API_KEY=xxx AZURE_OPENAI_ENDPOINT=https://xxx.openai.azure.com/ ./mvnw spring-boot:run
 ```
 
 The backend starts on **http://localhost:8080**.
@@ -131,7 +135,7 @@ Open two terminals:
 **Terminal 1 — Backend:**
 ```bash
 cd backend
-export $(cat .env | xargs) && mvn spring-boot:run
+export $(cat .env | xargs) && ./mvnw spring-boot:run
 ```
 
 **Terminal 2 — Frontend:**
@@ -148,7 +152,7 @@ Then open **http://localhost:3000**.
 
 ```bash
 cd backend
-mvn test
+./mvnw test
 ```
 
 ---
@@ -158,7 +162,10 @@ mvn test
 ```
 juno/
 ├── backend/                     # Spring Boot + Spring AI
-│   ├── pom.xml                  # Maven dependencies
+│   ├── pom.xml                  # Maven dependencies (aligned with cloud env)
+│   ├── mvnw                     # Maven Wrapper (no Maven install needed)
+│   ├── mvnw.cmd                 # Maven Wrapper (Windows)
+│   ├── .mvn/wrapper/            # Maven Wrapper config
 │   ├── .env.example             # Azure OpenAI credentials template
 │   └── src/main/
 │       ├── java/com/juno/
@@ -206,6 +213,7 @@ juno/
 | `spring.ai.azure.openai.chat.options.deployment-name` | `gpt-4o` | Azure deployment name |
 | `spring.ai.azure.openai.chat.options.temperature` | `0.7` | LLM temperature |
 | `server.port` | `8080` | Backend port |
+| `juno.cors.allowed-origins` | `http://localhost:3000,http://localhost:4000` | CORS origins (override via `JUNO_CORS_ORIGINS` env var for DevPod/cloud) |
 | `juno.agents.config-path` | `classpath:agents/*.md` | Agent definition files |
 | `juno.conversation.max-messages-before-summarization` | `10` | Message count before summarizing |
 | `juno.conversation.messages-to-keep-after-summarization` | `5` | Messages retained after summarization |
@@ -274,9 +282,11 @@ Reverse the three steps above. Both integration folders coexist in the codebase.
 
 | Issue | Fix |
 |---|---|
-| `Connection refused on :8080` | Backend not running. Check `mvn spring-boot:run` output. |
+| `Connection refused on :8080` | Backend not running. Check `./mvnw spring-boot:run` output. |
 | `AZURE_OPENAI_API_KEY not set` | Export env vars: `export $(cat .env \| xargs)` |
+| `mvnw: Permission denied` | Run `chmod +x mvnw` to make the wrapper executable. |
+| `JAVA_HOME not set` | Ensure Java 21+ is installed and `JAVA_HOME` points to it. |
 | `No agent definitions loaded` | Check `agents/*.md` files exist in `src/main/resources/agents/` |
-| `CORS error in browser` | Backend allows `localhost:3000` by default. Check `CorsConfig.java`. |
+| `CORS error in browser` | Set `JUNO_CORS_ORIGINS` env var to your frontend URL. Defaults to `localhost:3000,localhost:4000`. |
 | `SSE stream closes immediately` | Check backend logs for errors. Ensure Azure OpenAI credentials are valid. |
 | `npm install fails` | Ensure Node.js 18+ and npm 9+. Try `rm -rf node_modules && npm install`. |

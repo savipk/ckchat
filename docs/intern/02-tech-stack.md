@@ -100,21 +100,36 @@ spring.ai.azure.openai.chat.options.deployment-name: gpt-4o
 
 ---
 
-### Maven
+### Maven (via Maven Wrapper)
 
 **What it is:** A build tool for Java. It manages dependencies, compiles code, runs tests, and packages the app.
 
 **Why we use it:** Standard for enterprise Java. Declarative `pom.xml` makes dependencies explicit.
 
+**Maven Wrapper (`mvnw`):** The project includes a Maven Wrapper script so you don't need Maven installed — just Java 21+. The wrapper downloads the correct Maven version (3.9.9) automatically on first run. Always use `./mvnw` instead of `mvn`.
+
 **Key commands:**
 ```bash
-mvn clean install         # Compile + run tests + package JAR
-mvn spring-boot:run       # Run the application
-mvn test                  # Run tests only
-mvn dependency:tree       # Show all dependencies
+./mvnw clean install         # Compile + run tests + package JAR
+./mvnw spring-boot:run       # Run the application
+./mvnw test                  # Run tests only
+./mvnw dependency:tree       # Show all dependencies
+./mvnw spotless:apply        # Auto-format code (Spotless)
+./mvnw spotless:check        # Check formatting without modifying
 ```
 
-**Learn more:** [Maven Getting Started](https://maven.apache.org/guides/getting-started/) | [Maven in 5 Minutes](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+**Build plugins included (aligned with cloud env):**
+
+| Plugin | Purpose |
+|---|---|
+| Spotless | Code formatting enforcement |
+| Maven Compiler | Lombok + MapStruct annotation processing |
+| JaCoCo | Code coverage reporting |
+| Maven Surefire | Test execution with Mockito agent |
+| Azure Functions | Azure deployment packaging |
+| Maven Javadoc | Documentation generation |
+
+**Learn more:** [Maven Getting Started](https://maven.apache.org/guides/getting-started/) | [Maven in 5 Minutes](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) | [Maven Wrapper](https://maven.apache.org/wrapper/)
 
 ---
 
