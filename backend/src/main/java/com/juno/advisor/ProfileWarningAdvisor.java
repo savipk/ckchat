@@ -1,11 +1,15 @@
 package com.juno.advisor;
 
 import com.juno.service.ProfileScoreService;
-import org.springframework.ai.chat.client.advisor.api.*;
+import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;
+import org.springframework.ai.chat.client.advisor.api.AdvisedResponse;
+import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.prompt.Prompt;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Warns if profile completion is below threshold.
@@ -14,7 +18,7 @@ import java.util.ArrayList;
  * Appends a system message warning when the user's profile is incomplete,
  * so the agent can proactively suggest profile improvements.
  */
-public class ProfileWarningAdvisor implements CallAdvisor {
+public class ProfileWarningAdvisor implements CallAroundAdvisor {
 
     private final ProfileScoreService scoreService;
     private final int threshold;
@@ -35,23 +39,22 @@ public class ProfileWarningAdvisor implements CallAdvisor {
     }
 
     @Override
-    public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
+    public AdvisedResponse aroundCall(AdvisedRequest request, CallAroundAdvisorChain chain) {
         int score = scoreService.computeCurrentScore();
 
         if (score < threshold) {
-            var messages = new ArrayList<>(request.prompt().getInstructions());
+            var messages = new ArrayList<Message>(request.messages());
             messages.add(new SystemMessage(
                     "PROFILE WARNING: The user's profile completion is " + score + "% "
                             + "(below " + threshold + "% threshold). "
                             + "Consider suggesting profile improvements for better job matches."
             ));
 
-            request = ChatClientRequest.builder()
-                    .prompt(new Prompt(messages, request.prompt().getOptions()))
-                    .context(request.context())
+            request = AdvisedRequest.from(request)
+                    .withMessages(messages)
                     .build();
         }
 
-        return chain.nextCall(request);
+        return chain.nextAroundCall(request);
     }
 }

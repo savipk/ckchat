@@ -1,8 +1,13 @@
 package com.juno.advisor;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.api.*;
+import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;
+import org.springframework.ai.chat.client.advisor.api.AdvisedResponse;
+import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +17,7 @@ import java.util.List;
  * Phase 1: Simple message truncation (keep last N messages).
  * Phase 2: LLM-based summarization of older messages.
  */
-public class SummarizationAdvisor implements CallAdvisor {
+public class SummarizationAdvisor implements CallAroundAdvisor {
 
     private final int maxMessages;
     private final int keepAfterSummarization;
@@ -33,28 +38,27 @@ public class SummarizationAdvisor implements CallAdvisor {
     }
 
     @Override
-    public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
-        var messages = request.prompt().getInstructions();
+    public AdvisedResponse aroundCall(AdvisedRequest request, CallAroundAdvisorChain chain) {
+        List<Message> messages = request.messages();
 
-        if (messages.size() > maxMessages) {
-            // Phase 1: keep only the last N messages (system + recent)
+        if (messages != null && messages.size() > maxMessages) {
+            // Phase 1: keep only the last N messages (preserve system messages)
             var system = messages.stream()
-                    .filter(m -> m instanceof org.springframework.ai.chat.messages.SystemMessage)
+                    .filter(m -> m instanceof SystemMessage)
                     .toList();
             var nonSystem = messages.stream()
-                    .filter(m -> !(m instanceof org.springframework.ai.chat.messages.SystemMessage))
+                    .filter(m -> !(m instanceof SystemMessage))
                     .toList();
 
-            var kept = new java.util.ArrayList<>(system);
+            var kept = new ArrayList<Message>(system);
             int startIdx = Math.max(0, nonSystem.size() - keepAfterSummarization);
             kept.addAll(nonSystem.subList(startIdx, nonSystem.size()));
 
-            request = ChatClientRequest.builder()
-                    .prompt(new org.springframework.ai.chat.prompt.Prompt(kept, request.prompt().getOptions()))
-                    .context(request.context())
+            request = AdvisedRequest.from(request)
+                    .withMessages(kept)
                     .build();
         }
 
-        return chain.nextCall(request);
+        return chain.nextAroundCall(request);
     }
 }
