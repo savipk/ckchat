@@ -165,21 +165,22 @@ fi
 mkdir -p -- "${MAVEN_HOME%/*}"
 
 # Download and Install Apache Maven
+distributionFilename="${distributionUrl##*/}"
 verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
 verbose "Downloading from: $distributionUrl"
-verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrl"
+verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionFilename"
 
 # select wget or curl
 if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
   verbose "Found wget ... using wget"
-  wget ${MVNW_VERBOSE:+"--verbose"} --max-redirect=5 -O "$TMP_DOWNLOAD_DIR/$distributionUrl" -- "$distributionUrl" || die "wget: Failed to fetch $distributionUrl"
+  wget ${MVNW_VERBOSE:+"--verbose"} --max-redirect=5 -O "$TMP_DOWNLOAD_DIR/$distributionFilename" -- "$distributionUrl" || die "wget: Failed to fetch $distributionUrl"
 elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
   verbose "Found curl ... using curl"
-  curl ${MVNW_VERBOSE:+"-v"} -L --fail --max-redirs 5 -o "$TMP_DOWNLOAD_DIR/$distributionUrl" -- "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
+  curl ${MVNW_VERBOSE:+"-v"} -L --fail --max-redirs 5 -o "$TMP_DOWNLOAD_DIR/$distributionFilename" -- "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
 elif set_java_home; then
   verbose "Falling back to java to download"
   javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
-  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrl"
+  targetZip="$TMP_DOWNLOAD_DIR/$distributionFilename"
   cat >"${javaSource}" <<-END
 	public class Downloader extends java.net.Authenticator {
 	  protected java.net.PasswordAuthentication getPasswordAuthentication() {
@@ -206,11 +207,11 @@ if [ -n "${distributionSha256Sum-}" ]; then
     echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
     exit 1
   elif command -v sha256sum >/dev/null; then
-    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrl" | sha256sum -c >/dev/null 2>&1; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionFilename" | sha256sum -c >/dev/null 2>&1; then
       distributionSha256Result=true
     fi
   elif command -v shasum >/dev/null; then
-    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrl" | shasum -a 256 -c >/dev/null 2>&1; then
+    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionFilename" | shasum -a 256 -c >/dev/null 2>&1; then
       distributionSha256Result=true
     fi
   else
@@ -227,11 +228,11 @@ fi
 
 # unzip and move
 if command -v unzip >/dev/null; then
-  unzip ${MVNW_VERBOSE:+"-q"} "$TMP_DOWNLOAD_DIR/$distributionUrl" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
+  unzip ${MVNW_VERBOSE:+"-q"} "$TMP_DOWNLOAD_DIR/$distributionFilename" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
 else
-  tar xzf${MVNW_VERBOSE:+"v"} "$TMP_DOWNLOAD_DIR/$distributionUrl" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
+  tar xzf${MVNW_VERBOSE:+"v"} "$TMP_DOWNLOAD_DIR/$distributionFilename" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
 fi
-printf %s\\n "$TMP_DOWNLOAD_DIR/$distributionUrl" | sed 's|.*[/\\]||;s|\.zip$||;s|\.tar\.gz$||' | while IFS= read -r dirName; do
+printf %s\\n "$TMP_DOWNLOAD_DIR/$distributionFilename" | sed 's|.*[/\\]||;s|\.zip$||;s|\.tar\.gz$||' | while IFS= read -r dirName; do
   mv -- "$TMP_DOWNLOAD_DIR/$dirName" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move"
 done
 
