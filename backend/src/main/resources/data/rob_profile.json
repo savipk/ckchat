@@ -1,0 +1,534 @@
+{
+  "entityId": "43751962",
+  "userId": "43751962",
+  "externalSourceId": "43751962",
+  "externalSourceType": "HR_DATA_MESH",
+  "managers": [
+    {
+      "userId": "43762920",
+      "managerType": "LINE_MANAGER"
+    }
+  ],
+  "email": "robert.fuentes@ubs.com",
+  "core": {
+    "name": {
+      "salutation": "Mr",
+      "title": null,
+      "legalFirstName": "Robert",
+      "legalMiddleName": null,
+      "legalLastName": "Fuentes",
+      "businessFirstName": "Robert",
+      "businessLastName": "Fuentes"
+    },
+    "rank": {
+      "code": "MD",
+      "description": "Managing Director",
+      "id": "35"
+    },
+    "employeeType": {
+      "code": "Y",
+      "description": "Employee"
+    },
+    "businessTitle": "Head HRCS Tech & Head LatAM and Canada Tech",
+    "corporateTitleCode": "MD",
+    "corporateTitleDescription": "Managing Director",
+    "currentRoleTenure": null,
+    "jobCode": "ZL3106",
+    "enterpriseSeniorityDate": "2023-05-15",
+    "gcrs": {
+      "businessDivisionCode": "N14954",
+      "businessDivisionDescription": "Group Functions",
+      "businessUnitCode": "N18245",
+      "businessUnitDescription": "GOTO",
+      "businessAreaCode": "N18522",
+      "businessAreaDescription": "GOTO Technology",
+      "businessSectorCode": "N22716",
+      "businessSectorDescription": "GF TECH-HR",
+      "businessSegmentCode": "N28938",
+      "businessSegmentDescription": "GF TECH-HR-Center of Excellence",
+      "businessFunctionCode": "63687",
+      "businessFunctionDescription": "GF TECH-HR-Center of Excellence-FN"
+    },
+    "organizationalUnits": [
+      {
+        "code": "ST9Y",
+        "description": "GROUP FUNCTIONS",
+        "level": 3
+      },
+      {
+        "code": "YGNZ",
+        "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+        "level": 4
+      },
+      {
+        "code": "L92A",
+        "description": "GROUP TECHNOLOGY-C840",
+        "level": 5
+      },
+      {
+        "code": "A8GG",
+        "description": "GF TECH-GROUP FUNCTIONS TECH LEAD-C840",
+        "level": 6
+      }
+    ],
+    "reportingDistance": {
+      "geb": 2,
+      "ceo": 3,
+      "chairman": 4
+    },
+    "workLocation": {
+      "code": "905381",
+      "description": "New York-Eleven Madison Avenue",
+      "buildingCode": "EMAC",
+      "postalCode": "10010-3629",
+      "city": "New York",
+      "stateCode": "NY",
+      "state": "New York",
+      "county": null,
+      "countryCode": "US",
+      "country": "United States",
+      "region": "Americas"
+    }
+  },
+  "workEligibility": null,
+  "language": {
+    "languages": [
+      {
+        "id": "8e5646e2-db3c-491c-9b91-6570cad7e04e",
+        "language": {
+          "type": "SimpleReferenceDataDto",
+          "code": "en",
+          "description": "English"
+        },
+        "proficiency": {
+          "type": "SimpleReferenceDataDto",
+          "code": "NATIVE",
+          "description": "Native"
+        }
+      },
+      {
+        "id": "8d64637c-6183-4d21-be90-dc0c13e6e394",
+        "language": {
+          "type": "SimpleReferenceDataDto",
+          "code": "es",
+          "description": "Spanish"
+        },
+        "proficiency": {
+          "type": "SimpleReferenceDataDto",
+          "code": "FLUENT",
+          "description": "Fluent"
+        }
+      },
+      {
+        "id": "6d48ce86-830e-435b-a69e-665df3f40b99",
+        "language": {
+          "type": "SimpleReferenceDataDto",
+          "code": "pt",
+          "description": "Portuguese"
+        },
+        "proficiency": {
+          "type": "SimpleReferenceDataDto",
+          "code": "INTERMEDIATE",
+          "description": "Intermediate"
+        }
+      }
+    ],
+    "createdDateTime": "2025-04-16T21:40:40.228922400Z",
+    "createdBy": "43784307",
+    "lastModifiedDateTime": "2025-04-16T21:40:40.228922400Z",
+    "lastModifiedBy": "43784307"
+  },
+  "affiliation": {
+    "awards": [],
+    "boards": [],
+    "mandates": [],
+    "memberships": [
+      {
+        "id": "74151951-7920-40e3-af1e-919e8b10f808",
+        "name": "Board Member",
+        "affiliation": "Rewriting the Code",
+        "startYear": 2024,
+        "endYear": null,
+        "description": null
+      }
+    ],
+    "createdDateTime": "2025-04-29T11:15:38.705885600Z",
+    "createdBy": "43751962",
+    "lastModifiedDateTime": "2025-04-29T11:15:38.705885600Z",
+    "lastModifiedBy": "43751962"
+  },
+  "experience": {
+    "experiences": [
+      {
+        "id": "65cc132e-fbba-4af0-84d8-b89f0b4d320b",
+        "jobTitle": "Head HRCS Tech & Head LatAM and Canada Tech",
+        "company": "UBS",
+        "area": {
+          "type": "AreaReferenceDataParentDto",
+          "code": "2386dc63-a4e1-4305-8ec1-8e43dae20e83",
+          "description": "Group Operations and Technology Office",
+          "isActive": null,
+          "children": [
+            {
+              "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+              "description": "GOTO Group Functions Technology",
+              "isActive": null
+            }
+          ]
+        },
+        "startDate": "2024-06-01",
+        "endDate": null,
+        "country": {
+          "type": "SimpleReferenceDataDto",
+          "code": "US",
+          "description": "United States"
+        },
+        "details": ""
+      },
+      {
+        "id": "98c36f16-79dd-4af6-864a-ccca4a81d54a",
+        "jobTitle": "Head of HR, GCS, Legal and Comms & Branding Eng",
+        "company": "UBS",
+        "area": null,
+        "startDate": "2023-01-01",
+        "endDate": "2024-01-01",
+        "country": null,
+        "details": null
+      },
+      {
+        "id": "bf8d80d8-a59a-4eed-b4f6-ca72ecbf0c7f",
+        "jobTitle": "Head of Eng for Compliance, HCM, Legal, Internal Audit Cybersecurity, Te",
+        "company": "Goldman Sachs",
+        "area": null,
+        "startDate": "2011-01-01",
+        "endDate": "2023-01-01",
+        "country": null,
+        "details": null
+      },
+      {
+        "id": "8d462597-fdef-442b-bef1-a669888c7dbf",
+        "jobTitle": "CIO for Americas (US and Latam)  covering all front to back functions",
+        "company": "Dresdner Kleinwort & Commerzbank",
+        "area": null,
+        "startDate": "2002-01-01",
+        "endDate": "2011-01-01",
+        "country": null,
+        "details": null
+      },
+      {
+        "id": "eed71ba5-f98c-4ba6-9af8-ce6cbc8636ac",
+        "jobTitle": "Head of Eng for Money Markets, Repo, MM Derivatives and Agency Lending /",
+        "company": "Deutsche Bank",
+        "area": null,
+        "startDate": "1996-01-01",
+        "endDate": "2002-01-01",
+        "country": null,
+        "details": null
+      }
+    ],
+    "internationalExperience": false,
+    "crossDivisionalExperience": true,
+    "createdDateTime": "2025-05-05T12:35:56.459571600Z",
+    "createdBy": "43751962",
+    "lastModifiedDateTime": "2025-05-05T12:35:56.459571600Z",
+    "lastModifiedBy": "43751962"
+  },
+  "qualification": {
+    "educations": [
+      {
+        "id": "d409b8f2-fe9d-4405-bf92-ffbd28d09782",
+        "institutionName": "Pace University",
+        "degree": "BBA",
+        "areaOfStudy": "Management Information Systems",
+        "completionYear": 1989,
+        "country": null,
+        "achievements": null
+      }
+    ],
+    "certifications": [],
+    "createdDateTime": "2025-05-20T11:44:46.407639300Z",
+    "createdBy": "43771596",
+    "lastModifiedDateTime": "2025-05-20T11:44:46.407639300Z",
+    "lastModifiedBy": "43771596"
+  },
+  "careerAspirationPreference": {
+    "preferredAspirations": [
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "e5cb2f4e-3704-40b0-9803-eba834b9562c",
+        "description": "Client-facing role"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "08427fa2-06e6-44cb-b32d-398b65a72e4a",
+        "description": "Focus on leadership and management"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "80711ecb-a1b9-4b57-9d78-d8ccf43729b2",
+        "description": "Increased responsibility and ownership"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "801e128f-1d3b-42f9-9101-0f2c01035608",
+        "description": "Change, new technology, and innovation focus"
+      }
+    ],
+    "createdDateTime": "2025-12-10T16:06:04.045946100Z",
+    "createdBy": "43751962",
+    "lastModifiedDateTime": "2025-12-10T16:06:04.045947Z",
+    "lastModifiedBy": "43751962"
+  },
+  "careerLocationPreference": {
+    "preferredRelocationTimeline": {
+      "type": "SimpleReferenceDataDto",
+      "code": "NOW",
+      "description": "Yes, ready now"
+    },
+    "preferredRelocationRegions": [
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "AMERICAS",
+        "description": "Americas (excl. US)"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "UK",
+        "description": "United Kingdom"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "EMEA",
+        "description": "EMEA (excl. UK)"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "CH",
+        "description": "Switzerland"
+      },
+      {
+        "type": "SimpleReferenceDataDto",
+        "code": "US",
+        "description": "United States of America"
+      }
+    ],
+    "createdDateTime": "2025-12-10T16:06:04.045987600Z",
+    "createdBy": "43751962",
+    "lastModifiedDateTime": "2025-12-10T16:06:04.045987800Z",
+    "lastModifiedBy": "43751962"
+  },
+  "careerRolePreference": {
+    "preferredRoles": [
+      {
+        "id": "fcd50866-1826-4adc-894c-325ddbcaa07f9",
+        "area": {
+          "type": "AreaReferenceDataParentDto",
+          "code": "2386dc63-a4e1-4305-8ec1-8e43dae20e83",
+          "description": "Group Operations and Technology Office",
+          "isActive": null,
+          "children": [
+            {
+              "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+              "description": "GOTO Group Functions Technology",
+              "isActive": null
+            }
+          ]
+        },
+        "roleClassification": null,
+        "role": {
+          "id": "43762920",
+          "businessTitle": "Head Group Functions Technology",
+          "jobCode": "ZL0076",
+          "organizationalUnits": [
+            {
+              "code": "ST9Y",
+              "description": "GROUP FUNCTIONS",
+              "level": 3
+            },
+            {
+              "code": "YGNZ",
+              "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+              "level": 4
+            },
+            {
+              "code": "H5S5",
+              "description": "GOTO MANAGEMENT - 3040",
+              "level": 5
+            },
+            {
+              "code": "H5GD",
+              "description": "GF TECH-GROUP FUNCTIONS TECH LEAD-3040",
+              "level": 6
+            }
+          ],
+          "gcrs": {
+            "businessDivisionCode": "N14954",
+            "businessDivisionDescription": "Group Functions",
+            "businessUnitCode": "N18245",
+            "businessUnitDescription": "GOTO",
+            "businessAreaCode": "N18522",
+            "businessAreaDescription": "GOTO Technology",
+            "businessSectorCode": "N25112",
+            "businessSectorDescription": "GF TECH-CBO CoE",
+            "businessSegmentCode": "N25104",
+            "businessSegmentDescription": "GF TECH-CBO-Core MGMT & Strategy",
+            "businessFunctionCode": "55334",
+            "businessFunctionDescription": "GF TECH-CBO-Core MGMT & Strategy-FN"
+          }
+        },
+        "description": null
+      },
+      {
+        "id": "37351897-c039-4071-8669-417174e798b5",
+        "area": {
+          "type": "AreaReferenceDataParentDto",
+          "code": "2386dc63-a4e1-4305-8ec1-8e43dae20e83",
+          "description": "Group Operations and Technology Office",
+          "isActive": null,
+          "children": [
+            {
+              "code": "02f7a4a7-f1b6-4e63-bd40-49893a82b51d",
+              "description": "GOTO WM US Technology",
+              "isActive": null
+            }
+          ]
+        },
+        "roleClassification": null,
+        "role": {
+          "id": "43692374",
+          "businessTitle": "Head Technology WM US",
+          "jobCode": "ZS2446",
+          "organizationalUnits": [
+            {
+              "code": "ST9Y",
+              "description": "GROUP FUNCTIONS",
+              "level": 3
+            },
+            {
+              "code": "YGNZ",
+              "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+              "level": 4
+            },
+            {
+              "code": "L92A",
+              "description": "GROUP TECHNOLOGY-C840",
+              "level": 5
+            },
+            {
+              "code": "KTR5",
+              "description": "GOTO WMA USA",
+              "level": 6
+            }
+          ],
+          "gcrs": {
+            "businessDivisionCode": "N14954",
+            "businessDivisionDescription": "Group Functions",
+            "businessUnitCode": "N18245",
+            "businessUnitDescription": "GOTO",
+            "businessAreaCode": "N18522",
+            "businessAreaDescription": "GOTO Technology",
+            "businessSectorCode": "N28791",
+            "businessSectorDescription": "GOTO WMA Operations Mgmt",
+            "businessSegmentCode": "N28728",
+            "businessSegmentDescription": "GOTO WMA Operating Mgmt",
+            "businessFunctionCode": "63186",
+            "businessFunctionDescription": "GOTO WMA_Operating Mgmt"
+          }
+        },
+        "description": null
+      },
+      {
+        "id": "32e23ee2-faca-4d94-a84e-34f79d71ed8e",
+        "area": {
+          "type": "AreaReferenceDataParentDto",
+          "code": "2386dc63-a4e1-4305-8ec1-8e43dae20e83",
+          "description": "Group Operations and Technology Office",
+          "isActive": null,
+          "children": [
+            {
+              "code": "f1f28168-5aca-4bb7-86dc-495d1e11c183",
+              "description": "GOTO IB & NCL Technology",
+              "isActive": null
+            }
+          ]
+        },
+        "roleClassification": null,
+        "role": {
+          "id": null,
+          "businessTitle": "Front Office Trading Tech Lead",
+          "jobCode": null,
+          "organizationalUnits": null,
+          "gcrs": null
+        },
+        "description": null
+      },
+      {
+        "id": "87febcff-1b90-4c41-bbeb-d2a69dd6fb16",
+        "area": {
+          "type": "AreaReferenceDataParentDto",
+          "code": "2386dc63-a4e1-4305-8ec1-8e43dae20e83",
+          "description": "Group Operations and Technology Office",
+          "isActive": null,
+          "children": [
+            {
+              "code": "5ba2e3cd-17a3-44d7-8da0-c220a7fa4975",
+              "description": "GOTO AM Technology",
+              "isActive": null
+            }
+          ]
+        },
+        "roleClassification": null,
+        "role": {
+          "id": null,
+          "businessTitle": "Front Office Tech Lead",
+          "jobCode": null,
+          "organizationalUnits": null,
+          "gcrs": null
+        },
+        "description": null
+      }
+    ],
+    "createdDateTime": "2025-04-29T11:23:27.449907Z",
+    "createdBy": "43751962",
+    "lastModifiedDateTime": "2025-04-29T11:23:27.449907Z",
+    "lastModifiedBy": "43751962"
+  },
+  "skills": {
+    "extracted": [],
+    "top": [
+      {
+        "id": "1",
+        "source": "AI_INFERRED",
+        "name": "Agentic AI"
+      },
+      {
+        "id": "2",
+        "source": "AI_INFERRED",
+        "name": "Cloud Computing"
+      }
+    ],
+    "additional": [
+      {
+        "id": "3",
+        "source": "AI_INFERRED",
+        "name": "Data Science"
+      },
+      {
+        "id": "4",
+        "source": "AI_INFERRED",
+        "name": "Machine Learning"
+      }
+    ]
+  },
+  "delegates": [
+    {
+      "userId": "43771596"
+    }
+  ],
+  "version": "\"2c00a5d2-0000-0c00-0000-69399a6c0000\"",
+  "createdDateTime": "2025-04-16T14:30:00.536752700Z",
+  "createdBy": "hr-data-mesh-batch-service",
+  "lastModifiedDateTime": "2025-12-10T16:06:04.049415300Z",
+  "lastModifiedBy": "43751962",
+  "completionScore": 100
+}

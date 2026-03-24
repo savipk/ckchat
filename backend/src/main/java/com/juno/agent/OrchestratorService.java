@@ -14,27 +14,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Protocol-agnostic orchestrator that routes user messages to specialist agents.
- *
- * Responsibilities:
- * - Classify user intent and route to the correct agent ChatClient
- * - Detect HITL tool calls (approveProfileUpdate) and return them for frontend rendering
- * - Handle HITL resume: load persisted state, execute the approved tool, return result
- * - For non-HITL flows: call specialist agent and return text response
- *
- * This service returns AgentResponse (domain objects).
- * The ProtocolAdapter handles serialization to SSE events.
- *
- * HITL pattern follows juno/docs/springai/10-hitl-distributed-non-blocking.md:
- * - Stream 1: detect HITL tool → simulate score → emit events → persist state → close
- * - Stream 2: load state → execute backend tool → return final text
- */
 @Service
 public class OrchestratorService {
 
     private static final Logger log = LoggerFactory.getLogger(OrchestratorService.class);
     private static final Set<String> HITL_TOOLS = Set.of("approveProfileUpdate");
+    private static final Set<String> APPROVAL_PHRASES = Set.of(
+            "yes", "y", "sure", "go ahead", "approve", "ok", "okay", "confirm", "yep", "yeah");
+    private static final Set<String> REJECTION_PHRASES = Set.of(
+            "no", "n", "cancel", "reject", "decline", "nope", "nah", "never mind");
 
     private final Map<String, ChatClient> agentClients;
     private final ConversationStateStore stateStore;
@@ -54,28 +42,45 @@ public class OrchestratorService {
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * Process a user request. Entry point for the AG-UI controller.
-     */
     public AgentResponse process(String threadId, RunAgentInput input) {
-        var toolResult = input.extractToolResult();
-
-        if (toolResult != null) {
-            return resumeFromHitl(threadId, toolResult);
+        // Set request context for tools to access threadId/userId
+        String userId = extractUserId(input);
+        AgentRequestContext.set(threadId, userId);
+        try {
+            var toolResult = input.extractToolResult();
+            if (toolResult != null) {
+                return resumeFromHitl(threadId, toolResult);
+            }
+            return routeAndExecute(threadId, input);
+        } finally {
+            AgentRequestContext.clear();
         }
-
-        return routeAndExecute(threadId, input);
     }
 
     private AgentResponse routeAndExecute(String threadId, RunAgentInput input) {
         String userMessage = input.userMessage();
+
+        // HITL: check for pending approval via chat text
+        if (stateStore.hasPending(threadId)) {
+            String trimmed = userMessage.toLowerCase().trim();
+            if (APPROVAL_PHRASES.contains(trimmed)) {
+                log.info("Chat-based HITL approval for thread: {}", threadId);
+                return executeApprovedHitl(threadId);
+            } else if (REJECTION_PHRASES.contains(trimmed)) {
+                stateStore.delete(threadId);
+                return AgentResponse.text("No worries — the profile update has been cancelled.");
+            } else {
+                // Unrelated message while HITL pending → auto-reject and proceed
+                log.info("Auto-rejecting pending HITL for thread {} due to new message", threadId);
+                stateStore.delete(threadId);
+            }
+        }
 
         if (userMessage.isBlank()) {
             return AgentResponse.text("Hi! I can help with your profile, job search, outreach, "
                     + "candidate search, and job descriptions. What would you like to do?");
         }
 
-        // Classify intent → agent name (null = direct orchestrator response)
         String agentName = classifyIntent(userMessage);
 
         if (agentName == null) {
@@ -91,7 +96,6 @@ public class OrchestratorService {
 
         log.info("Routing to agent: {} for thread: {}", agentName, threadId);
 
-        // Call the specialist agent
         String response = agent.prompt()
                 .user(userMessage)
                 .call()
@@ -109,7 +113,6 @@ public class OrchestratorService {
             return AgentResponse.text("I couldn't find the pending action. Could you try again?");
         }
 
-        // Parse the user's decision
         boolean approved = false;
         try {
             var decision = objectMapper.readValue(toolResult.content(), Map.class);
@@ -124,7 +127,21 @@ public class OrchestratorService {
             return AgentResponse.text("No worries — the profile update has been cancelled.");
         }
 
-        // Execute the approved update
+        return executeApprovedUpdate(savedState);
+    }
+
+    @SuppressWarnings("unchecked")
+    private AgentResponse executeApprovedHitl(String threadId) {
+        var savedState = stateStore.load(threadId);
+        if (savedState == null) {
+            return AgentResponse.text("I couldn't find the pending action. Could you try again?");
+        }
+        stateStore.delete(threadId);
+        return executeApprovedUpdate(savedState);
+    }
+
+    @SuppressWarnings("unchecked")
+    private AgentResponse executeApprovedUpdate(AgentResponse.ConversationState savedState) {
         var pendingTool = savedState.pendingToolCall();
         String section = (String) pendingTool.getOrDefault("section", "skills");
         var updates = (Map<String, Object>) pendingTool.getOrDefault("updates", Map.of());
@@ -140,12 +157,6 @@ public class OrchestratorService {
                 + prevScore + "% to " + newScore + "%.");
     }
 
-    /**
-     * Simple keyword-based intent classification.
-     * Returns agent name or null for direct orchestrator response.
-     *
-     * Phase 2: Replace with LLM-based classification via orchestrator ChatClient.
-     */
     private String classifyIntent(String message) {
         String lower = message.toLowerCase();
 
@@ -155,7 +166,8 @@ public class OrchestratorService {
         }
 
         if (containsAny(lower, "find job", "find me job", "job match", "find role", "show me role",
-                "job search", "matching job", "open position", "internal job", "find me a")) {
+                "job search", "matching job", "open position", "internal job", "find me a",
+                "find matching role", "find roles")) {
             return "job-discovery";
         }
 
@@ -165,12 +177,13 @@ public class OrchestratorService {
         }
 
         if (containsAny(lower, "find candidate", "search candidate", "search employee",
-                "find employee", "find people", "search people")) {
+                "find employee", "find people", "search people", "search for candidate",
+                "find candidates")) {
             return "candidate-search";
         }
 
         if (containsAny(lower, "job description", "create jd", "write jd", "generate jd",
-                "requisition", "draft jd")) {
+                "requisition", "draft jd", "create a job description")) {
             return "jd-generator";
         }
 
@@ -179,7 +192,6 @@ public class OrchestratorService {
             return null;
         }
 
-        // Default: return null for orchestrator direct response
         return null;
     }
 
@@ -206,6 +218,14 @@ public class OrchestratorService {
 
         return AgentResponse.text("I can help with profile management, job discovery, outreach, "
                 + "candidate search, and job descriptions. What would you like to do?");
+    }
+
+    private String extractUserId(RunAgentInput input) {
+        if (input.forwardedProps() != null) {
+            Object userId = input.forwardedProps().get("userId");
+            if (userId != null) return String.valueOf(userId);
+        }
+        return "default";
     }
 
     private boolean containsAny(String text, String... keywords) {

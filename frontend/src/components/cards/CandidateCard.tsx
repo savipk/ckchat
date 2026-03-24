@@ -1,77 +1,67 @@
-/**
- * Framework-agnostic CandidateCard component.
- * Displays an employee/candidate profile with skills and match info.
- * Ported from juno/public/elements/CandidateCard.jsx — same styling.
- */
+"use client";
+
+import { useChatInput } from "@/hooks/usePopulateChatInput";
 
 interface CandidateCardProps {
-  candidate: {
-    employeeId: string;
-    name: string;
-    email?: string;
-    businessTitle?: string;
-    rank?: string;
-    location?: string;
-    skills?: string[];
-    yearsAtCompany?: number;
-    profileCompletionScore?: number;
-    matchScore?: number;
-  };
+  candidate: Record<string, unknown>;
 }
 
 export function CandidateCard({ candidate }: CandidateCardProps) {
+  const { populateChatInput } = useChatInput();
+  const name = candidate.name as string;
+  const title = candidate.businessTitle as string;
+  const location = candidate.location as string;
+  const department = candidate.department as string;
+  const skills = (candidate.skills as string[]) ?? [];
+  const years = candidate.yearsAtCompany as number;
+  const matchScore = candidate.matchScore as number;
+  const employeeId = candidate.employeeId as string;
+
+  const initials = name
+    ? name.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase()
+    : "??";
+
   return (
-    <div className="border rounded-lg p-4 mb-3 bg-white shadow-sm">
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="font-semibold text-gray-900">{candidate.name}</h3>
-          {candidate.businessTitle && (
-            <p className="text-sm text-gray-600">{candidate.businessTitle}</p>
+    <div
+      className="border rounded-lg p-4 mb-3 bg-white shadow-sm cursor-pointer hover:border-teal-400 transition-colors"
+      onClick={() => populateChatInput(`View candidate ${name} (${employeeId})`, true)}
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-semibold text-sm flex-shrink-0">
+          {initials}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-semibold text-gray-900 truncate">{name}</div>
+            {matchScore != null && (
+              <span
+                className="px-2 py-0.5 text-xs font-medium rounded text-white flex-shrink-0 ml-2"
+                style={{ backgroundColor: matchScore >= 80 ? "#0f766e" : "#d97706" }}
+              >
+                {matchScore}%
+              </span>
+            )}
+          </div>
+          {title && <div className="text-xs text-gray-500">{title}</div>}
+          <div className="flex flex-wrap items-center gap-x-3 mt-1 text-xs text-gray-400">
+            {location && <span>{location}</span>}
+            {department && <span>{department}</span>}
+            {years != null && <span>{years}y tenure</span>}
+          </div>
+          {skills.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {skills.slice(0, 6).map((skill, i) => (
+                <span key={i} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
+                  {skill}
+                </span>
+              ))}
+              {skills.length > 6 && (
+                <span className="text-xs text-gray-400">+{skills.length - 6} more</span>
+              )}
+            </div>
           )}
         </div>
-        {candidate.matchScore != null && (
-          <span
-            className="text-xs font-medium px-2 py-1 rounded-full text-white"
-            style={{
-              backgroundColor:
-                candidate.matchScore >= 80 ? "#0f766e" : "#d97706",
-            }}
-          >
-            {candidate.matchScore}%
-          </span>
-        )}
       </div>
-
-      <div className="flex gap-4 mt-2 text-xs text-gray-500">
-        {candidate.location && <span>{candidate.location}</span>}
-        {candidate.rank && <span>{candidate.rank}</span>}
-        {candidate.yearsAtCompany != null && (
-          <span>{candidate.yearsAtCompany}y at company</span>
-        )}
-      </div>
-
-      {candidate.skills && candidate.skills.length > 0 && (
-        <div className="flex flex-wrap gap-1 mt-2">
-          {candidate.skills.slice(0, 6).map((skill, i) => (
-            <span
-              key={i}
-              className="text-xs px-2 py-0.5 rounded-full"
-              style={{
-                background: "#fff",
-                border: "1px solid #e5e7eb",
-                color: "#1f2937",
-              }}
-            >
-              {skill}
-            </span>
-          ))}
-          {candidate.skills.length > 6 && (
-            <span className="text-xs text-gray-400">
-              +{candidate.skills.length - 6} more
-            </span>
-          )}
-        </div>
-      )}
     </div>
   );
 }

@@ -1,16 +1,16 @@
 package com.juno.advisor;
 
-import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;
-import org.springframework.ai.chat.client.advisor.api.AdvisedResponse;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisor;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
+import org.springframework.ai.chat.client.ChatClientRequest;
+import org.springframework.ai.chat.client.ChatClientResponse;
 
 /**
  * Injects user context (name, skills, level) into the system prompt.
  * Ported from Juno agents/shared/middleware.py
  * (employee_personalization and hiring_manager_personalization).
  */
-public class PersonalizationAdvisor implements CallAroundAdvisor {
+public class PersonalizationAdvisor implements CallAdvisor {
 
     private final String persona; // "employee" or "hiring_manager"
 
@@ -29,7 +29,7 @@ public class PersonalizationAdvisor implements CallAroundAdvisor {
     }
 
     @Override
-    public AdvisedResponse aroundCall(AdvisedRequest request, CallAroundAdvisorChain chain) {
+    public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
         // Phase 2: Extract user context from AgentContext (request-scoped bean)
         // and inject into the system prompt.
         //
@@ -38,6 +38,6 @@ public class PersonalizationAdvisor implements CallAroundAdvisor {
         //    Top Skills: Python, Machine Learning, Data Engineering"
         //
         // For now, pass through without modification.
-        return chain.nextAroundCall(request);
+        return chain.nextCall(request);
     }
 }

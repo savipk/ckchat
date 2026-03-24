@@ -91,5 +91,25 @@ public class ProfileScoreService {
         return !((Map<?, ?>) sectionData).isEmpty();
     }
 
+    /**
+     * Returns per-section score breakdown: {experience: 25, skills: 0, ...}
+     * Each section gets either 0 or its full weight.
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Integer> computeSectionScores(Map<String, Object> profile) {
+        var core = (Map<String, Object>) profile.getOrDefault("core", Map.of());
+        var scores = new LinkedHashMap<String, Integer>();
+
+        for (var entry : SECTIONS.entrySet()) {
+            String key = entry.getKey();
+            SectionInfo info = entry.getValue();
+            var sectionData = core.get(key);
+            int sectionScore = (sectionData != null && hasData(key, sectionData, info)) ? info.weight : 0;
+            scores.put(key, sectionScore);
+        }
+
+        return scores;
+    }
+
     private record SectionInfo(String listField, int weight) {}
 }

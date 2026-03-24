@@ -1,0 +1,413 @@
+{
+    "entityId": "43814964",
+    "userId": "43814964",
+    "externalSourceId": "43814964",
+    "externalSourceType": "HR_DATA_MESH",
+    "managers": [
+      {
+        "userId": "00171709",
+        "managerType": "LINE_MANAGER"
+      }
+    ],
+    "email": "john.mitchell@ubs.com",
+    "core": {
+      "name": {
+        "salutation": "Mr",
+        "title": null,
+        "legalFirstName": "John",
+        "legalMiddleName": null,
+        "legalLastName": "Mitchell",
+        "businessFirstName": "John",
+        "businessLastName": "Mitchell"
+      },
+      "rank": {
+        "code": "ED",
+        "description": "Executive Director",
+        "id": "30"
+      },
+      "employeeType": {
+        "code": "Y",
+        "description": "Employee"
+      },
+      "businessTitle": "Engineering Lead & Architect",
+      "corporateTitleCode": "ED",
+      "corporateTitleDescription": "Executive Director",
+      "currentRoleTenure": null,
+      "jobCode": "ZS3165",
+      "enterpriseSeniorityDate": "2024-08-19",
+      "gcrs": {
+        "businessDivisionCode": "N14954",
+        "businessDivisionDescription": "Group Functions",
+        "businessUnitCode": "N18245",
+        "businessUnitDescription": "GOTO",
+        "businessAreaCode": "N18322",
+        "businessAreaDescription": "GOTO Technology",
+        "businessSectorCode": "N22716",
+        "businessSectorDescription": "GF TECH-HR",
+        "businessSegmentCode": "N28933",
+        "businessSegmentDescription": "GF TECH-HR-Talent & Culture &Recruiting",
+        "businessFunctionCode": "63682",
+        "businessFunctionDescription": "GF TECH-HR-Talent&Culture&Recruiting-FN"
+      },
+      "organizationalUnits": [
+        {
+          "code": "ST9Y",
+          "description": "GROUP FUNCTIONS",
+          "level": 3
+        },
+        {
+          "code": "YGNZ",
+          "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+          "level": 4
+        },
+        {
+          "code": "L92A",
+          "description": "GROUP TECHNOLOGY-C840",
+          "level": 5
+        },
+        {
+          "code": "A8GG",
+          "description": "GF TECH-GROUP FUNCTIONS TECH LEAD-C840",
+          "level": 6
+        }
+      ],
+      "reportingDistance": {
+        "geb": 5,
+        "ceo": 6,
+        "chairman": 7
+      },
+      "workLocation": {
+        "code": "905381",
+        "description": "New York-Eleven Madison Avenue",
+        "buildingCode": "EMAC",
+        "postalCode": "10010-3629",
+        "city": "New York",
+        "stateCode": "NY",
+        "state": "New York",
+        "county": null,
+        "countryCode": "US",
+        "country": "United States",
+        "region": "Americas"
+      }
+    },
+    "workEligibility": {
+      "workEligibility": [
+        {
+          "id": "b8017109-6604-4e3d-a27d-78ce9d7a6702",
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "US",
+            "description": "United States"
+          }
+        }
+      ],
+      "createdDateTime": "2025-12-03T19:19:27.698032600Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:19:27.698033Z",
+      "lastModifiedBy": "43814964"
+    },
+    "language": {
+      "languages": [
+        {
+          "id": "d50b43fe-2e1b-474b-9004-35e84a32c0ed",
+          "language": {
+            "type": "SimpleReferenceDataDto",
+            "code": "en",
+            "description": "English"
+          },
+          "proficiency": {
+            "type": "SimpleReferenceDataDto",
+            "code": "FLUENT",
+            "description": "Fluent"
+          }
+        }
+      ],
+      "createdDateTime": "2025-12-03T19:19:27.693857200Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:19:27.693858Z",
+      "lastModifiedBy": "43814964"
+    },
+    "affiliation": {
+      "awards": [],
+      "boards": [],
+      "mandates": [],
+      "memberships": [],
+      "createdDateTime": "2025-12-03T19:19:27.695909700Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:19:27.695910200Z",
+      "lastModifiedBy": "43814964"
+    },
+    "experience": {
+      "experiences": [
+        {
+          "id": "98fded2a-bdf4-4b90-8d28-18a78bbb4ef8",
+          "jobTitle": "Engineering Lead & Architect",
+          "company": "UBS",
+          "area": {
+            "type": "AreaReferenceDataParentDto",
+            "code": "2386dc63-4ae1-4305-8ec1-8e43dae208e3",
+            "description": "Group Operations and Technology Office",
+            "isActive": null,
+            "children": [
+              {
+                "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+                "description": "GOTO Group Functions Technology",
+                "isActive": null
+              }
+            ]
+          },
+          "startDate": "2024-08-01",
+          "endDate": null,
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "US",
+            "description": "United States"
+          },
+          "details": "Leading the design and delivery of Agentic AI solutions over scalable microservice architectu"
+        },
+        {
+          "id": "d0a11d64-887c-4e36-8105-1c3d91ceef0e",
+          "jobTitle": "Lead Software Engineer, Backend",
+          "company": "Goldman Sachs",
+          "area": null,
+          "startDate": "2017-02-01",
+          "endDate": "2024-08-01",
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "US",
+            "description": "United States"
+          },
+          "details": "Transformed and redefined talent acquisition for 200K+ monthly users through the development"
+        }
+      ],
+      "internationalExperience": true,
+      "crossDivisionalExperience": false,
+      "createdDateTime": "2025-12-03T19:19:27.697086800Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:19:27.697087800Z",
+      "lastModifiedBy": "43814964"
+    },
+    "qualification": {
+      "educations": [
+        {
+          "id": "0e5117ce-ad4e-408b-8d0b-e56f0169412c",
+          "institutionName": "Illinois Institute of Technology",
+          "degree": "Bachelor of Science (BS)",
+          "areaOfStudy": "Computer Science",
+          "completionYear": 2016,
+          "country": {
+            "type": "SimpleReferenceDataDto",
+            "code": "US",
+            "description": "United States"
+          },
+          "achievements": null
+        }
+      ],
+      "certifications": [],
+      "createdDateTime": "2025-12-03T19:19:27.697482600Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:19:27.697483Z",
+      "lastModifiedBy": "43814964"
+    },
+    "careerAspirationPreference": {
+      "preferredAspirations": [
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "08427fa2-06e6-44cb-b32d-398b65a72e4a",
+          "description": "Focus on leadership and management"
+        },
+        {
+          "type": "SimpleReferenceDataDto",
+          "code": "801e128f-1d3b-42f9-9101-0f2c01035608",
+          "description": "Change, new technology, and innovation focus"
+        }
+      ],
+      "createdDateTime": "2025-12-03T19:27:41.489182Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:27:41.489182700Z",
+      "lastModifiedBy": "43814964"
+    },
+    "careerLocationPreference": {
+      "preferredRelocationTimeline": {
+        "type": "SimpleReferenceDataDto",
+        "code": "NO",
+        "description": "No"
+      },
+      "preferredRelocationRegions": [],
+      "createdDateTime": "2025-12-03T19:27:41.489251Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:27:41.489251600Z",
+      "lastModifiedBy": "43814964"
+    },
+    "careerRolePreference": {
+      "preferredRoles": [
+        {
+          "id": "44b5b9f6-216e-4180-9f2a-9a907971a05a",
+          "area": {
+            "type": "AreaReferenceDataParentDto",
+            "code": "2386dc63-4ae1-4305-8ec1-8e43dae208e3",
+            "description": "Group Operations and Technology Office",
+            "isActive": null,
+            "children": [
+              {
+                "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+                "description": "GOTO Group Functions Technology",
+                "isActive": null
+              }
+            ]
+          },
+          "roleClassification": null,
+          "role": {
+            "id": "43537959",
+            "businessTitle": "CTO HR & CGS, CoE Lead, Architecture HR",
+            "jobCode": "ZS3185",
+            "organizationalUnits": [
+              {
+                "code": "ST9Y",
+                "description": "GROUP FUNCTIONS",
+                "level": 3
+              },
+              {
+                "code": "YGNZ",
+                "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+                "level": 4
+              },
+              {
+                "code": "L92A",
+                "description": "GROUP TECHNOLOGY-C840",
+                "level": 5
+              },
+              {
+                "code": "A8GG",
+                "description": "GF TECH-GROUP FUNCTIONS TECH LEAD-C840",
+                "level": 6
+              }
+            ],
+            "gcrs": {
+              "businessDivisionCode": "N14954",
+              "businessDivisionDescription": "Group Functions",
+              "businessUnitCode": "N18245",
+              "businessUnitDescription": "GOTO",
+              "businessAreaCode": "N18522",
+              "businessAreaDescription": "GOTO Technology",
+              "businessSectorCode": "N29045",
+              "businessSectorDescription": "GF TECH-CTO and Agile",
+              "businessSegmentCode": "N30574",
+              "businessSegmentDescription": "GF TECH-CTO-HRCS and LCB",
+              "businessFunctionCode": "66795",
+              "businessFunctionDescription": "GF TECH-CTO-HRCS and LCB-FN"
+            }
+          },
+          "description": null
+        },
+        {
+          "id": "72d46844-9183-4f2b-b225-c68877820a92",
+          "area": {
+            "type": "AreaReferenceDataParentDto",
+            "code": "2386dc63-4ae1-4305-8ec1-8e43dae208e3",
+            "description": "Group Operations and Technology Office",
+            "isActive": null,
+            "children": [
+              {
+                "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+                "description": "GOTO Group Functions Technology",
+                "isActive": null
+              }
+            ]
+          },
+          "roleClassification": null,
+          "role": {
+            "id": "43637030",
+            "businessTitle": "Group Functions CTO, GF Tech India/APAC Head & Distinguished Engineer",
+            "jobCode": "ZL3106",
+            "organizationalUnits": [
+              {
+                "code": "ST9Y",
+                "description": "GROUP FUNCTIONS",
+                "level": 3
+              },
+              {
+                "code": "YGNZ",
+                "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+                "level": 4
+              },
+              {
+                "code": "L92A",
+                "description": "GROUP TECHNOLOGY-C840",
+                "level": 5
+              },
+              {
+                "code": "A8GG",
+                "description": "GF TECH-GROUP FUNCTIONS TECH LEAD-C840",
+                "level": 6
+              }
+            ],
+            "gcrs": {
+              "businessDivisionCode": "N14954",
+              "businessDivisionDescription": "Group Functions",
+              "businessUnitCode": "N18245",
+              "businessUnitDescription": "GOTO",
+              "businessAreaCode": "N18522",
+              "businessAreaDescription": "GOTO Technology",
+              "businessSectorCode": "N29045",
+              "businessSectorDescription": "GF TECH-CTO and Agile",
+              "businessSegmentCode": "N25103",
+              "businessSegmentDescription": "GF TECH-CTO",
+              "businessFunctionCode": "55333",
+              "businessFunctionDescription": "GF TECH-CTO-FN"
+            }
+          },
+          "description": null
+        },
+        {
+          "id": "484c4d8a-b11c-4024-ba6c-edbb5e20d77b",
+          "area": {
+            "type": "AreaReferenceDataParentDto",
+            "code": "2386dc63-4ae1-4305-8ec1-8e43dae208e3",
+            "description": "Group Operations and Technology Office",
+            "isActive": null,
+            "children": [
+              {
+                "code": "25ce23f0-3e5d-4390-aef6-35a017aa6e32",
+                "description": "GOTO Group Functions Technology",
+                "isActive": null
+              }
+            ]
+          },
+          "roleClassification": null,
+          "role": {
+            "id": "43751962",
+            "businessTitle": "Head HRCS Tech & Head LatAM and Canada Tech",
+            "jobCode": "ZL3106",
+            "organizationalUnits": [
+              {
+                "code": "ST9Y",
+                "description": "GROUP FUNCTIONS",
+                "level": 3
+              },
+              {
+                "code": "YGNZ",
+                "description": "GROUP OPERATIONS AND TECHNOLOGY OFFICE",
+                "level": 4
+              }
+            ],
+            "gcrs": null
+          },
+          "description": null
+        }
+      ],
+      "createdDateTime": "2025-04-24T20:31:41.118131Z",
+      "createdBy": "43814964",
+      "lastModifiedDateTime": "2025-12-03T19:27:49.583396400Z",
+      "lastModifiedBy": "43814964"
+    },
+    "skills": null,
+    "delegates": [],
+    "version": "\"b0007ff5-0000-0c00-0000-693a5e130000\"",
+    "createdDateTime": "2025-04-16T14:33:44.753923400Z",
+    "createdBy": "hr-data-mesh-batch-service",
+    "lastModifiedDateTime": "2025-12-11T06:00:51.012853400Z",
+    "lastModifiedBy": "talent-profile-service",
+    "completionScore": 80
+  }
+  

@@ -1,24 +1,21 @@
 package com.juno.advisor;
 
 import com.juno.service.ProfileScoreService;
-import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;
-import org.springframework.ai.chat.client.advisor.api.AdvisedResponse;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisor;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
+import org.springframework.ai.chat.client.ChatClientRequest;
+import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.prompt.Prompt;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Warns if profile completion is below threshold.
- * Ported from Juno agents/shared/middleware.py (profile_warning_middleware).
- *
- * Appends a system message warning when the user's profile is incomplete,
- * so the agent can proactively suggest profile improvements.
+ * Appends a system message so the agent can proactively suggest profile improvements.
  */
-public class ProfileWarningAdvisor implements CallAroundAdvisor {
+public class ProfileWarningAdvisor implements CallAdvisor {
 
     private final ProfileScoreService scoreService;
     private final int threshold;
@@ -39,22 +36,22 @@ public class ProfileWarningAdvisor implements CallAroundAdvisor {
     }
 
     @Override
-    public AdvisedResponse aroundCall(AdvisedRequest request, CallAroundAdvisorChain chain) {
+    public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
         int score = scoreService.computeCurrentScore();
 
         if (score < threshold) {
-            var messages = new ArrayList<Message>(request.messages());
+            var messages = new ArrayList<Message>(request.prompt().getInstructions());
             messages.add(new SystemMessage(
                     "PROFILE WARNING: The user's profile completion is " + score + "% "
                             + "(below " + threshold + "% threshold). "
                             + "Consider suggesting profile improvements for better job matches."
             ));
 
-            request = AdvisedRequest.from(request)
-                    .messages(messages)
+            request = request.mutate()
+                    .prompt(new Prompt(messages, request.prompt().getOptions()))
                     .build();
         }
 
-        return chain.nextAroundCall(request);
+        return chain.nextCall(request);
     }
 }

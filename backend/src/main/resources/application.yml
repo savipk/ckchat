@@ -1,4 +1,15 @@
 spring:
+  datasource:
+    url: jdbc:sqlite:data/juno.db
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
   ai:
     azure:
       openai:

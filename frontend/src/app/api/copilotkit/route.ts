@@ -1,16 +1,15 @@
 import {
   CopilotRuntime,
-  ExperimentalEmptyAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
-import { LangGraphHttpAgent } from "@copilotkit/runtime/langgraph";
+import { HttpAgent } from "@ag-ui/client";
 
 /**
  * Next.js API route hosting the CopilotKit Runtime.
  * Acts as a thin proxy between the CopilotKit frontend and the Spring Boot backend.
  *
- * To switch to assistant-ui: replace this file with an assistant-ui runtime handler.
- * The Spring Boot backend endpoint stays the same.
+ * Uses HttpAgent (AG-UI protocol) to communicate with the Spring Boot backend's
+ * AgUiProtocolAdapter which emits AG-UI SSE events.
  */
 
 const SPRING_BACKEND_URL =
@@ -18,7 +17,8 @@ const SPRING_BACKEND_URL =
 
 const runtime = new CopilotRuntime({
   agents: {
-    default: new LangGraphHttpAgent({
+    default: new HttpAgent({
+      agentId: "hr-assistant",
       url: SPRING_BACKEND_URL,
     }),
   },
@@ -27,7 +27,6 @@ const runtime = new CopilotRuntime({
 export const POST = async (req: Request) => {
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
-    serviceAdapter: new ExperimentalEmptyAdapter(),
     endpoint: "/api/copilotkit",
   });
   return handleRequest(req);

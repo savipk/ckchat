@@ -1,23 +1,23 @@
 package com.juno.advisor;
 
-import org.springframework.ai.chat.client.advisor.api.AdvisedRequest;
-import org.springframework.ai.chat.client.advisor.api.AdvisedResponse;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisor;
-import org.springframework.ai.chat.client.advisor.api.CallAroundAdvisorChain;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
+import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
+import org.springframework.ai.chat.client.ChatClientRequest;
+import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.prompt.Prompt;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Compresses conversation history when it exceeds a threshold.
- * Ported from Juno core/middleware/summarization.py.
  *
  * Phase 1: Simple message truncation (keep last N messages).
  * Phase 2: LLM-based summarization of older messages.
  */
-public class SummarizationAdvisor implements CallAroundAdvisor {
+public class SummarizationAdvisor implements CallAdvisor {
 
     private final int maxMessages;
     private final int keepAfterSummarization;
@@ -34,15 +34,14 @@ public class SummarizationAdvisor implements CallAroundAdvisor {
 
     @Override
     public int getOrder() {
-        return 100; // Run early in the chain
+        return 100;
     }
 
     @Override
-    public AdvisedResponse aroundCall(AdvisedRequest request, CallAroundAdvisorChain chain) {
-        List<Message> messages = request.messages();
+    public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
+        List<Message> messages = request.prompt().getInstructions();
 
         if (messages != null && messages.size() > maxMessages) {
-            // Phase 1: keep only the last N messages (preserve system messages)
             var system = messages.stream()
                     .filter(m -> m instanceof SystemMessage)
                     .toList();
@@ -54,11 +53,11 @@ public class SummarizationAdvisor implements CallAroundAdvisor {
             int startIdx = Math.max(0, nonSystem.size() - keepAfterSummarization);
             kept.addAll(nonSystem.subList(startIdx, nonSystem.size()));
 
-            request = AdvisedRequest.from(request)
-                    .messages(kept)
+            request = request.mutate()
+                    .prompt(new Prompt(kept, request.prompt().getOptions()))
                     .build();
         }
 
-        return chain.nextAroundCall(request);
+        return chain.nextCall(request);
     }
 }
