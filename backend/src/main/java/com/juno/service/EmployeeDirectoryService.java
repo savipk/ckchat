@@ -35,7 +35,9 @@ public class EmployeeDirectoryService {
     void loadEmployees() {
         try {
             var resource = resourceLoader.getResource("classpath:data/employee_directory.json");
-            employees = objectMapper.readValue(resource.getInputStream(), new TypeReference<>() {});
+            Map<String, Object> wrapper = objectMapper.readValue(resource.getInputStream(),
+                    new TypeReference<Map<String, Object>>() {});
+            employees = (List<Map<String, Object>>) wrapper.get("employees");
             log.info("Loaded {} employees", employees.size());
         } catch (IOException e) {
             log.error("Failed to load employee_directory.json: {}", e.getMessage());

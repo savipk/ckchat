@@ -41,7 +41,9 @@ public class JobDataService {
     void loadJobs() {
         try {
             var resource = resourceLoader.getResource("classpath:data/matching_jobs.json");
-            allJobs = objectMapper.readValue(resource.getInputStream(), new TypeReference<>() {});
+            Map<String, Object> wrapper = objectMapper.readValue(resource.getInputStream(),
+                    new TypeReference<Map<String, Object>>() {});
+            allJobs = (List<Map<String, Object>>) wrapper.get("jobs");
             log.info("Loaded {} job postings", allJobs.size());
         } catch (IOException e) {
             log.error("Failed to load matching_jobs.json: {}", e.getMessage());

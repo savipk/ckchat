@@ -34,7 +34,9 @@ public class RequisitionService {
     void loadRequisitions() {
         try {
             var resource = resourceLoader.getResource("classpath:data/job_requisitions.json");
-            requisitions = objectMapper.readValue(resource.getInputStream(), new TypeReference<>() {});
+            Map<String, Object> wrapper = objectMapper.readValue(resource.getInputStream(),
+                    new TypeReference<Map<String, Object>>() {});
+            requisitions = (List<Map<String, Object>>) wrapper.get("requisitions");
             log.info("Loaded {} requisitions", requisitions.size());
         } catch (IOException e) {
             log.error("Failed to load job_requisitions.json: {}", e.getMessage());
